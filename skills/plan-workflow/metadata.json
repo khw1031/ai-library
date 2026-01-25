@@ -1,0 +1,7 @@
+{
+  "name": "plan-workflow",
+  "version": "2.0.0",
+  "description": "기획서 분석 및 PRD 마크다운 생성. Extract → Organize → Quick Review.",
+  "created_at": "2026-01-26T00:00:00Z",
+  "updated_at": "2026-01-26T00:00:00Z"
+}
