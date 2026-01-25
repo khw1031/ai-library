@@ -4,6 +4,29 @@
 > 이전 대화의 내용은 이 Step과 관련이 없습니다.
 > 아래 지시사항에만 집중하세요.
 
+---
+
+## 규칙 로드 (필수)
+
+**이 Step을 시작하기 전에 다음 규칙을 로드하세요:**
+
+1. **규칙 인덱스 읽기**: [assets/rules/AGENTS.md](../assets/rules/AGENTS.md)
+2. **필수 규칙 로드**: `MUST/workflow-rule.md` (항상)
+3. **도메인 규칙 확인**: 구현 대상에 따라 동적 로드
+   - 예: React 컴포넌트 구현 → `react/AGENTS.md`
+   - 예: API 클라이언트 구현 → `api/AGENTS.md`
+   - 예: 테스트 코드 작성 → `testing/AGENTS.md`
+   - 예: 타입 정의 → `typescript/AGENTS.md`
+
+**빠른 체크:**
+```
+□ MUST/workflow-rule.md 로드함
+□ Step 4 입력 파일: 20-output-system-design.md, 30-output-task.md, todos/*.md 존재 확인
+□ status.yaml에서 Step 3 completed 확인
+```
+
+---
+
 ## 역할 정의
 
 당신은 **Coordinator (조율자)**입니다.

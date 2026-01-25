@@ -1,11 +1,11 @@
 ---
-name: feature-development
+name: feature-workflow
 description: |
   일반적인 기능 구현을 위한 단계별 워크플로우를 제공합니다.
   .ai/tasks/ 디렉토리 구조를 사용하여 작업을 체계적으로 관리합니다.
 
   새 기능 구현 시:
-  - 기능 구현, 기능 개발, 기능 추가, 새 기능, 신규 개발
+  - 워크플로우를 이용, 기능 구현, 기능 개발, 기능 추가, 새 기능, 신규 개발
   - 기능 구현해줘, 기능 개발해줘, 구현해줘
   - feature, implement, new feature, add feature
 
@@ -24,9 +24,9 @@ metadata:
 allowed-tools: Bash Read Write Edit Glob Grep
 ---
 
-# General Feature Implementation
+# Feature Workflow Implementation
 
-일반적인 기능 구현을 체계적으로 진행하는 5단계 워크플로우입니다.
+기능 구현을 체계적으로 진행하는 5단계 워크플로우입니다.
 
 ## 핵심 원칙
 
@@ -35,11 +35,31 @@ allowed-tools: Bash Read Write Edit Glob Grep
 3. **Document as Interface**: Step 간 통신은 문서로 수행
 4. **Git as History**: 각 Step 완료 시 커밋으로 체크포인트 생성
 
+## 규칙 로드
+
+**각 Step 시작 시 반드시 규칙을 로드하세요:**
+
+1. [assets/rules/AGENTS.md](assets/rules/AGENTS.md) 읽기 (규칙 인덱스)
+2. **필수 규칙**: `MUST/workflow-rule.md` 항상 로드
+3. **도메인 규칙**: 작업 컨텍스트에 따라 동적 로드
+
+```
+Step 시작
+    │
+    ├─→ MUST/workflow-rule.md (항상)
+    │
+    └─→ 작업 컨텍스트에 따라:
+        ├─ React 작업 → react/AGENTS.md
+        ├─ 테스트 작업 → testing/AGENTS.md
+        ├─ API 작업 → api/AGENTS.md
+        └─ (디렉토리 없으면 건너뛰기)
+```
+
 ## 워크플로우 개요
 
 ```
 Step 1: Requirements    → 요구사항 분석 및 정리
-Step 2: Design          → 설계 및 구현 계획 수립
+Step 2: System Design   → 설계 및 구현 계획 수립
 Step 3: Task Analysis   → 구현 작업 분해 및 병렬화 계획
 Step 4: Implementation  → 코드 구현 및 테스트
 Step 5: Review          → 검토 및 문서화
@@ -47,7 +67,7 @@ Step 5: Review          → 검토 및 문서화
 
 | Step | 역할 | 입력 | 출력 | 상세 |
 |------|------|------|------|------|
-| 1 | Requirements Analyst | 00-user-input.md | 10-output-plan.md | [references/step-1.md](references/step-1.md) |
+| 1 | Requirements Analyst | 00-user-prompt.md | 10-output-plan.md | [references/step-1.md](references/step-1.md) |
 | 2 | System Designer | 10-output-plan.md | 20-output-system-design.md | [references/step-2.md](references/step-2.md) |
 | 3 | Task Analyzer | 10+20 | 30-output-task.md + todos/ | [references/step-3.md](references/step-3.md) |
 | 4 | Developer | 20-output-system-design.md | 40-output-implementation.md | [references/step-4.md](references/step-4.md) |
@@ -61,8 +81,9 @@ Step 5: Review          → 검토 및 문서화
 
 1. **Task ID 결정**: 사용자에게 요청 (예: `PROJ-001`)
 2. **Task 초기화**: `./scripts/task.sh init <TASK_ID>`
-3. **입력 작성**: `.ai/tasks/<TASK_ID>/00-user-input.md` 편집
-4. **Step 1 실행**: [references/step-1.md](references/step-1.md) 참조
+3. **입력 작성**: `.ai/tasks/<TASK_ID>/00-user-prompt.md` 편집
+4. **규칙 로드**: [assets/rules/AGENTS.md](assets/rules/AGENTS.md) 읽기
+5. **Step 1 실행**: [references/step-1.md](references/step-1.md) 참조
 
 ### 작업 재개
 
@@ -77,12 +98,16 @@ Step 5: Review          → 검토 및 문서화
    - `current_step`: 현재 진행 중인 Step
    - `steps.<step-N>.status`: 각 Step의 상태 (pending/in_progress/completed)
 
-3. **다음 동작 결정**:
+3. **규칙 로드**:
+   - [assets/rules/AGENTS.md](assets/rules/AGENTS.md) 읽기
+   - 해당 Step의 필수 규칙 섹션 로드
+
+4. **다음 동작 결정**:
    - 현재 Step의 status가 `pending` → 해당 Step 시작
    - 현재 Step의 status가 `in_progress` → 계속 진행
    - 현재 Step의 status가 `completed` → 다음 Step으로 이동
 
-4. **사용자에게 안내**:
+5. **사용자에게 안내**:
    ```
    📍 현재 상태: Step X (상태)
    📋 완료된 Step: Step 1, Step 2, ...
@@ -107,7 +132,7 @@ Step 5: Review          → 검토 및 문서화
 ### Step 1: Requirements Analysis
 - **역할**: Requirements Analyst
 - **목표**: 사용자 요구사항을 명확히 이해하고 구조화된 문서로 정리
-- **입력**: `.ai/tasks/<TASK_ID>/00-user-input.md`
+- **입력**: `.ai/tasks/<TASK_ID>/00-user-prompt.md`
 - **출력**: `.ai/tasks/<TASK_ID>/10-output-plan.md`
 - **완료 조건**: 출력 파일 생성 + Git 커밋
 - **상세**: [references/step-1.md](references/step-1.md)
@@ -169,7 +194,7 @@ Step 5: Review          → 검토 및 문서화
 ## 템플릿 및 리소스
 
 - **출력 템플릿**: [assets/templates/](assets/templates/)
-  - `00-user-input.md` - 초기 요구사항 입력
+  - `00-user-prompt.md` - 초기 요구사항 입력
   - `10-output-plan.md` - Step 1 출력
   - `20-output-system-design.md` - Step 2 출력
   - `30-output-task.md` - Step 3 출력

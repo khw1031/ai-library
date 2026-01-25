@@ -162,8 +162,9 @@ EOF
   echo ""
   info "Next steps:"
   echo "  1. Edit: $TASK_DIR/input.md"
-  echo "  2. Start Step 1"
-  echo "  3. Complete: ./scripts/task.sh complete $TASK_ID step-1"
+  echo "  2. Load rules: assets/rules/AGENTS.md"
+  echo "  3. Start Step 1: references/step-1.md"
+  echo "  4. Complete: ./scripts/task.sh complete $TASK_ID step-1"
 }
 
 cmd_status() {
@@ -268,6 +269,8 @@ cmd_complete() {
 
     echo ""
     info "Next: $next_step"
+    echo "  1. Load rules: assets/rules/AGENTS.md"
+    echo "  2. Read: references/$next_step.md"
     warn "Recommended: Start a new conversation for the next step"
   fi
 }
