@@ -2,11 +2,16 @@
 name: plan-workflow
 description: |
   기획서를 분석하고 PRD 마크다운을 생성하는 워크플로우입니다.
+  PRD 생성 후 각 관점별 전문가 검토도 지원합니다.
 
   트리거:
-  - 기획서 분석, PRD 추출, 기획 문서 정리
+  - 기획서 분석, PRD 추출, 기획 문서 정리, 기획서 검토
   - 기획서 링크 줘, 슬라이드 분석
   - plan workflow, specification analysis
+  - 백엔드 관점, API 설계, 보안 검토, 기술 검토, 서버 관점
+  - UX 검토, 사용성 검토, 플로우 확인, 사용자 경험
+  - 프론트엔드 관점, 앱 개발, 모바일 검토, 클라이언트 관점
+  - PRD 분석, 관점별 검토, 전문가 검토
 license: MIT
 metadata:
   author: ai-toolkit
