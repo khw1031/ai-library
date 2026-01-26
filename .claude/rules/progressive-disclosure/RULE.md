@@ -39,8 +39,9 @@ Progressive Disclosure는 정보를 3단계로 나누어 **필요할 때만 로�
 
 ```
 asset-name/
-├── CLAUDE.md          # 진입점 - 개요 (자동 인식)
+├── AGENTS.md          # 진입점 - 개요 (Claude 자동 인식)
 ├── [TYPE].md          # 2단계 - 핵심 지침
+├── CLAUDE.md          # AGENTS.md 참조 (선택적, 호환성)
 └── references/        # 3단계 - 상세 문서
     └── *.md
 ```
@@ -49,7 +50,8 @@ asset-name/
 
 | 파일 | 역할 | 크기 제한 |
 |------|------|----------|
-| CLAUDE.md | 진입점, README 역할 | 최소화 |
+| AGENTS.md | 진입점, Claude 자동 인식 | 최소화 |
+| CLAUDE.md | AGENTS.md 참조 (선택적) | 최소화 |
 | SKILL.md / RULE.md / AGENT.md | 핵심 지침 | <5000 토큰, <500줄 |
 | references/*.md | 상세 문서, 예제 | 무제한 |
 

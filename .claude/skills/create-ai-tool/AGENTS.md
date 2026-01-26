@@ -17,8 +17,9 @@ Claude Code에서 사용하는 Rules, Skills, Agents를 Progressive Disclosure �
 
 ```
 tool-name/
-├── CLAUDE.md      # 진입점 - 개요 (README 역할)
+├── AGENTS.md      # 진입점 - 개요 (Claude 자동 인식)
 ├── RULE.md        # 2단계 - 핵심 지침 (또는 SKILL.md, AGENT.md)
+├── CLAUDE.md      # AGENTS.md 참조
 └── references/    # 3단계 - 상세 문서
     └── *.md
 ```

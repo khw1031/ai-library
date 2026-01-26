@@ -26,8 +26,9 @@ agents/
 ```
 agents/
 └── code-reviewer/
-    ├── CLAUDE.md          # 진입점 - 에이전트 개요 (README 역할)
+    ├── AGENTS.md          # 진입점 - 에이전트 개요 (Claude 자동 인식)
     ├── AGENT.md           # 2단계 - 시스템 프롬프트
+    ├── CLAUDE.md          # AGENTS.md 참조 (선택적)
     └── references/        # 3단계 - 상세 문서 (온디맨드)
         └── review-criteria.md
 ```
@@ -39,12 +40,13 @@ agents/
 | `agent-name.md` | 간단한 에이전트, 참조 문서 불필요 |
 | `agent-name/` | 복잡한 에이전트, 상세 문서나 스크립트 필요 |
 
-### CLAUDE.md vs AGENT.md
+### AGENTS.md vs AGENT.md vs CLAUDE.md
 
 | 파일 | 역할 | 로드 시점 |
 |------|------|----------|
-| `CLAUDE.md` | 진입점 - 에이전트 개요, 사용 시나리오 | 탐색 시 |
+| `AGENTS.md` | 진입점 - 에이전트 개요, 사용 시나리오 (Claude 자동 인식) | 탐색 시 |
 | `AGENT.md` | 2단계 - 시스템 프롬프트 (실제 지침) | 호출 시 |
+| `CLAUDE.md` | AGENTS.md 참조 (선택적, 호환성) | 탐색 시 |
 
 ---
 

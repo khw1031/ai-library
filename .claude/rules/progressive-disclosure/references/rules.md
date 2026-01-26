@@ -8,12 +8,14 @@
 
 ```
 .claude/
-├── CLAUDE.md              # 프로젝트 진입점 - LLM/사용자를 위한 개요
+├── AGENTS.md              # 프로젝트 진입점 (Claude 자동 인식)
+├── CLAUDE.md              # AGENTS.md 참조 (선택적)
 ├── rules/                 # 규칙 디렉토리
 │   ├── rule-name.md       # 단일 파일 규칙 (간단한 규칙)
 │   └── rule-name/         # 디렉토리 규칙 (복잡한 규칙)
-│       ├── CLAUDE.md      # 진입점 - 규칙 개요 (README 역할)
+│       ├── AGENTS.md      # 진입점 - 규칙 개요 (Claude 자동 인식)
 │       ├── RULE.md        # 2단계 - 규칙 트리거 시 로드
+│       ├── CLAUDE.md      # AGENTS.md 참조 (선택적)
 │       └── references/    # 3단계 - 상세 문서 (온디맨드)
 │           └── *.md
 └── references/            # 프로젝트 레벨 상세 문서
