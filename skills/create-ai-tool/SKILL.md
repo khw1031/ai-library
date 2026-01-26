@@ -2,7 +2,9 @@
 name: create-ai-tool
 description: >
   Progressive Disclosure 원칙이 적용된 AI 도구를 생성합니다.
-  Rules, Skills, Agents 생성, 새 규칙 만들기, 스킬 생성, 에이전트 작성 시 사용하세요.
+  Rules, Skills, Agents 생성/구성/설계, 새 규칙 만들기, 스킬 생성,
+  에이전트 작성, 워크플로우 구조화, "어떻게 만들지", "어떻게 구성하면 좋을지"
+  질문 시에도 활성화됩니다.
 ---
 
 # AI Tool Creator
