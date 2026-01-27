@@ -14,18 +14,102 @@ argument-hint: "[project-path?]"
 
 ## 핵심 원칙
 
-1. **자동 분석**: 의존성, PRD, 구조에서 기술 스택과 컨벤션 추출
-2. **최신 정보 반영**: 웹 검색으로 기술 스택의 최신 베스트 프랙티스 확인
-3. **동적 규칙 생성**: 분석 결과를 기반으로 프로젝트에 맞는 규칙을 동적 생성
-4. **필수/선택 분류**: 핵심 규칙과 상황별 규칙을 분리하여 인덱싱
+1. **단일 파일 규칙**: 각 규칙은 `rule-name.md` 파일로 관리
+2. **그룹화 디렉토리**: 관련 규칙들은 디렉토리로 그룹화 + 인덱스 파일 포함
+3. **최신 정보 반영**: 웹 검색으로 기술 스택의 최신 베스트 프랙티스 확인
+4. **동적 규칙 생성**: 분석 결과를 기반으로 프로젝트에 맞는 규칙을 동적 생성
+
+---
+
+## 규칙 구조
+
+### 기본 구조
+
+```
+.claude/rules/
+├── AGENTS.md              # 전체 규칙 인덱스
+├── CLAUDE.md              # "AGENTS.md"
+│
+│   # 단일 파일 규칙 (간단한 규칙)
+├── typescript.md
+├── styling.md
+│
+│   # 그룹화 디렉토리 (관련 규칙 모음)
+├── frontend/
+│   ├── AGENTS.md          # 그룹 인덱스
+│   ├── react.md
+│   ├── state-management.md
+│   └── components.md
+│
+└── prd/
+    ├── AGENTS.md          # 그룹 인덱스
+    ├── user-stories.md
+    └── functional-specs.md
+```
+
+### 단일 파일 규칙
+
+간단한 규칙은 단일 `.md` 파일로 작성:
+
+```yaml
+---
+description: >
+  {무엇}을 위한 규칙. {언제/트리거} 시 활성화.
+paths:  # 선택 (조건부 활성화)
+  - "**/*.ts"
+---
+
+# {규칙명}
+
+## 핵심 규칙
+
+{규칙 내용}
+
+## 참조
+
+- [관련 문서](링크)
+```
+
+### 그룹화 디렉토리
+
+관련 규칙이 여러 개일 때 디렉토리로 그룹화:
+
+```
+group-name/
+├── AGENTS.md          # 그룹 인덱스 (필수)
+├── rule-a.md          # 개별 규칙
+├── rule-b.md
+└── rule-c.md
+```
+
+**그룹 인덱스 (AGENTS.md) 작성:**
+
+```markdown
+# {그룹명} Rules
+
+> {그룹 설명}
+
+## 규칙 목록
+
+| 규칙 | 설명 | 트리거 |
+|------|------|--------|
+| [rule-a](rule-a.md) | 설명 | `**/*.tsx` |
+| [rule-b](rule-b.md) | 설명 | 컴포넌트 작성 시 |
+```
+
+### 그룹화 기준
+
+| 기준 | 예시 |
+|------|------|
+| 기술 레이어 | `frontend/`, `backend/`, `infrastructure/` |
+| 도메인 | `prd/`, `auth/`, `payment/` |
+| 관심사 | `testing/`, `security/`, `performance/` |
 
 ---
 
 ## 실행 단계
 
 ### 1단계: 프로젝트 분석
-
-다음 순서로 프로젝트를 분석합니다:
 
 | 분석 대상 | 추출 정보 | 우선순위 |
 |----------|----------|---------|
@@ -41,28 +125,18 @@ package.json → JavaScript/TypeScript 기술 스택
 requirements.txt / pyproject.toml → Python 기술 스택
 Cargo.toml → Rust 기술 스택
 go.mod → Go 기술 스택
-Gemfile → Ruby 기술 스택
-pom.xml / build.gradle → Java/Kotlin 기술 스택
 ```
 
 **추출 항목:**
 - 런타임 및 **버전**: Node.js 20.x, Python 3.12 등
 - 프레임워크 및 **버전**: React 19, Next.js 15, NestJS 10 등
-- 빌드 도구: Vite, Webpack, Turbopack 등
-- 테스트 도구: Jest, Vitest, pytest 등
-- 린터/포맷터: ESLint, Prettier, Biome 등
-- **신규 도구 감지**: React Compiler, Turbopack 등 최신 도구
+- 빌드/테스트/린터 도구
+- **신규 도구 감지**: React Compiler, Turbopack 등
 
 #### 1.2 PRD/문서 분석
 
-프로젝트 내 문서 탐색:
-
 ```
-docs/PRD*.md, docs/prd*.md
-README.md
-ARCHITECTURE.md
-docs/*.md
-*.prd.md
+docs/PRD*.md, README.md, ARCHITECTURE.md, docs/*.md
 ```
 
 #### 1.3 프로젝트 구조 분석
@@ -75,114 +149,62 @@ src/ 또는 app/ 구조 → 아키텍처 패턴 파악
 
 ### 2단계: 최신 베스트 프랙티스 검색 (WebSearch)
 
-> **중요**: 기술 스택의 최신 권장사항은 빠르게 변화합니다.
 > 분석된 기술 스택과 버전을 기반으로 **웹 검색을 수행**하여 최신 정보를 확인합니다.
-
-#### 검색 대상
 
 | 기술 스택 | 검색 쿼리 예시 |
 |----------|---------------|
-| React 19 | `"React 19 best practices 2025"`, `"React Compiler migration guide"` |
+| React 19 | `"React 19 best practices 2025"`, `"React Compiler migration"` |
 | Next.js 15 | `"Next.js 15 App Router best practices"` |
-| TypeScript 5.x | `"TypeScript 5.x strict mode recommendations"` |
-| 새로운 도구 | `"babel-plugin-react-compiler vs useMemo 2025"` |
 
-#### 검색 시 확인 사항
-
-```
-□ 해당 버전에서 deprecated된 패턴이 있는가?
-  - 예: React 19 + React Compiler 사용 시 useMemo/useCallback 불필요
-  
-□ 새로운 권장 패턴이 있는가?
-  - 예: Next.js 15의 새로운 캐싱 전략
-  
-□ 보안 관련 업데이트가 있는가?
-  - 예: 새로운 취약점, 권장 설정 변경
-```
-
-#### 검색 결과 반영
-
-검색 결과를 규칙에 반영:
-
-```yaml
----
-description: >
-  React 19 컴포넌트 규칙. React Compiler 사용 프로젝트.
----
-
-# React 규칙
-
-## 주의: React Compiler 사용 프로젝트
-
-이 프로젝트는 React Compiler(babel-plugin-react-compiler)를 사용합니다.
-
-### 불필요한 최적화 (Compiler가 자동 처리)
-
-- `useMemo` - Compiler가 자동 메모이제이션
-- `useCallback` - Compiler가 자동 메모이제이션  
-- `React.memo` - 대부분의 경우 불필요
-
-### 권장 패턴
-
-- 단순하게 작성, Compiler가 최적화
-- 복잡한 수동 메모이제이션 제거
-```
+**확인 사항:**
+- deprecated된 패턴 (예: React Compiler 사용 시 useMemo 불필요)
+- 새로운 권장 패턴
+- 보안 관련 업데이트
 
 ---
 
-### 3단계: Rule 분류 및 동적 생성
+### 3단계: 규칙 분류 및 구조 결정
 
-#### 필수 vs 선택 분류
+#### 3.1 필수 vs 선택 분류
 
 ```
 [분석 결과]
     │
     ├─── 필수 규칙 (Essential)
-    │    ├── 기술 스택 규칙 (동적 생성)
-    │    ├── 프로젝트 구조 규칙
-    │    └── 코딩 컨벤션
+    │    ├── 기술 스택 규칙 (typescript.md, react.md)
+    │    ├── 프로젝트 구조 규칙 (architecture.md)
+    │    └── 코딩 컨벤션 (coding-style.md)
     │
     └─── 선택 규칙 (Conditional)
          ├── 도메인 규칙 - paths 또는 트리거 키워드
          ├── 테스트 규칙 - paths: ["**/*.test.*"]
-         └── 특정 모듈 규칙 - paths: ["src/특정모듈/**"]
+         └── 특정 모듈 규칙
 ```
 
-#### 동적 규칙 생성
+#### 3.2 단일 파일 vs 그룹화 결정
 
-**템플릿이 아닌 분석 결과 기반 생성:**
-
-1. 프로젝트의 **실제 구조**를 반영
-2. **버전별 특성**을 반영 (웹 검색 결과)
-3. **기존 설정**과 충돌하지 않도록 (eslint.config.js 등 참조)
-
-```yaml
-# 동적 생성 예시: 프로젝트 분석 결과 반영
----
-description: >
-  {프로젝트명} TypeScript 규칙. TypeScript {버전} strict mode.
-  {감지된 특성: monorepo, path aliases 등} 환경.
-paths:
-  - "**/*.ts"
-  - "**/*.tsx"
----
-
-# TypeScript 규칙
-
-## 프로젝트 환경
-
-- TypeScript: {감지된 버전}
-- Strict Mode: {tsconfig에서 감지}
-- Path Aliases: {감지된 aliases}
-
-## 핵심 규칙
-
-{웹 검색 + 프로젝트 분석 결과 기반 규칙}
-
-## 린터 참조
-
-상세 규칙은 기존 설정 참조: `{감지된 린터 설정 파일}`
 ```
+[각 규칙에 대해]
+    │
+    ├─── 독립적인 단일 주제
+    │    → 단일 파일: rule-name.md
+    │
+    └─── 관련 규칙이 3개 이상
+         → 그룹화 디렉토리: group-name/
+              ├── AGENTS.md (인덱스)
+              ├── rule-a.md
+              ├── rule-b.md
+              └── rule-c.md
+```
+
+**그룹화 권장 케이스:**
+
+| 케이스 | 그룹명 | 포함 규칙 |
+|--------|--------|----------|
+| 프론트엔드 규칙 3개 이상 | `frontend/` | react.md, state.md, components.md |
+| 백엔드 규칙 3개 이상 | `backend/` | api.md, database.md, auth.md |
+| PRD 관련 문서 | `prd/` | overview.md, user-stories.md, specs.md |
+| 테스트 규칙 세분화 | `testing/` | unit.md, integration.md, e2e.md |
 
 ---
 
@@ -203,56 +225,93 @@ rule-structurizer 스킬 확인:
 ```
 ⚠️ rule-structurizer 스킬이 필요합니다.
 
-긴 문서(PRD, 가이드 등)를 Progressive Disclosure 구조로 
-변환하려면 rule-structurizer 스킬을 설치하세요:
+긴 문서(PRD, 가이드 등)를 규칙 구조로 변환하려면 
+rule-structurizer 스킬을 설치하세요:
 
 설치 방법:
 1. ai-library 저장소에서 skills/rule-structurizer/ 복사
 2. 프로젝트의 .claude/skills/ 또는 ~/.claude/skills/에 배치
 
-또는 수동으로 문서를 분할할 수 있습니다:
-- AGENTS.md: 목차 및 개요 (~100 토큰)
-- RULE.md: 핵심 내용 (<5000 토큰)
-- references/: 상세 섹션별 파일
-```
-
-#### 스킬 존재 시
-
-```bash
-# rule-structurizer 스킬 호출
-/rule-structurizer docs/PRD.md .claude/rules
+또는 수동으로 그룹화 디렉토리를 생성하세요:
+- AGENTS.md: 그룹 인덱스
+- 섹션별 개별 .md 파일
 ```
 
 ---
 
 ### 5단계: 구조 생성 및 검증
 
-#### 생성되는 구조
+#### 생성 구조 예시
 
 ```
 .claude/rules/
-├── AGENTS.md             # 전체 인덱스
-├── CLAUDE.md             # "AGENTS.md"
+├── AGENTS.md                 # 전체 인덱스
+├── CLAUDE.md
 │
-├── {tech-stack}.md       # 필수: 동적 생성된 기술 스택 규칙
-├── architecture.md       # 필수: 프로젝트 구조 규칙
+│   # 단일 파일 규칙
+├── typescript.md             # 필수
+├── architecture.md           # 필수
+├── styling.md                # 필수
 │
-├── testing.md            # 선택: paths 기반
+│   # 그룹화 디렉토리
+├── frontend/                 # React 관련 규칙 그룹
+│   ├── AGENTS.md             # 그룹 인덱스
+│   ├── react.md
+│   ├── state-management.md
+│   └── components.md
 │
-└── {domain}/             # 선택: 긴 문서 (rule-structurizer)
+├── testing/                  # 테스트 관련 규칙 그룹
+│   ├── AGENTS.md
+│   ├── unit.md
+│   └── e2e.md
+│
+└── prd/                      # PRD 관련 문서 그룹
     ├── AGENTS.md
-    ├── RULE.md
-    └── references/
+    ├── overview.md
+    ├── user-stories.md
+    └── functional-specs.md
+```
+
+#### 루트 인덱스 (AGENTS.md) 작성
+
+```markdown
+# {프로젝트명} Rules
+
+> 프로젝트 규칙 인덱스
+
+## 단일 규칙
+
+| 규칙 | 트리거 | 설명 |
+|------|--------|------|
+| [typescript](typescript.md) | `**/*.ts` | TypeScript 컨벤션 |
+| [architecture](architecture.md) | 구조 설계 시 | 아키텍처 원칙 |
+| [styling](styling.md) | `**/*.css` | 스타일링 규칙 |
+
+## 규칙 그룹
+
+| 그룹 | 설명 | 참조 |
+|------|------|------|
+| [frontend](frontend/) | 프론트엔드 관련 규칙 | React, 상태관리, 컴포넌트 |
+| [testing](testing/) | 테스트 관련 규칙 | Unit, E2E |
+| [prd](prd/) | PRD 문서 | 요구사항, 스펙 |
 ```
 
 #### 검증 체크리스트
 
 ```
-□ AGENTS.md 인덱스가 모든 규칙을 포함하는가?
+구조 검증:
+□ 루트 AGENTS.md가 모든 규칙/그룹을 인덱싱하는가?
+□ 그룹 디렉토리에 AGENTS.md 인덱스가 있는가?
+□ 각 규칙 파일에 frontmatter(description)가 있는가?
+
+내용 검증:
 □ 규칙이 최신 베스트 프랙티스를 반영하는가?
 □ 기존 린터/설정과 충돌하지 않는가?
-□ 각 RULE.md가 5000 토큰 이내인가?
 □ deprecated 패턴이 권장되고 있지 않은가?
+
+그룹화 검증:
+□ 관련 규칙이 적절히 그룹화되었는가?
+□ 그룹 인덱스가 하위 규칙을 명확히 안내하는가?
 ```
 
 ---
@@ -262,11 +321,11 @@ rule-structurizer 스킬 확인:
 ### 1. 프로젝트 특성 우선
 
 ```
-# 좋은 예: 프로젝트 분석 결과 반영
+# 좋은 예
 "이 프로젝트는 Feature 기반 구조를 사용합니다."
 "React Compiler가 활성화되어 있어 수동 메모이제이션이 불필요합니다."
 
-# 피해야 할 예: 일반적인 템플릿
+# 피해야 할 예
 "React에서는 useMemo를 사용하세요." (← 버전/설정에 따라 다름)
 ```
 
@@ -276,9 +335,6 @@ rule-structurizer 스킬 확인:
 # 린터 설정이 있는 경우
 "상세 규칙은 eslint.config.js 참조"
 "Biome 설정(biome.json)이 포맷팅을 담당"
-
-# 중복 정의 피하기
-린터가 이미 강제하는 규칙은 Rule에서 제외
 ```
 
 ### 3. 버전 명시
