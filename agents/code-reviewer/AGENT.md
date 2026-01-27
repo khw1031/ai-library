@@ -48,7 +48,7 @@ git diff HEAD~1
 
 ### 2단계: 리뷰 문서 경로 결정
 
-저장 위치: `.ai/tasks/{TICKET_ID}/`
+저장 위치: `.ai/tasks/{TICKET_ID}/code_review/`
 
 **버전 관리 규칙:**
 
@@ -71,10 +71,10 @@ git diff HEAD~1
 
 ```bash
 # 디렉토리 생성 (없으면)
-mkdir -p .ai/tasks/{TICKET_ID}
+mkdir -p .ai/tasks/{TICKET_ID}/code_review
 
 # 기존 리뷰 파일 확인
-ls .ai/tasks/{TICKET_ID}/review-{TICKET_ID}*.md 2>/dev/null | sort -V | tail -1
+ls .ai/tasks/{TICKET_ID}/code_review/review-{TICKET_ID}*.md 2>/dev/null | sort -V | tail -1
 ```
 
 - 파일 없음 → `review-{TICKET_ID}.md`
@@ -113,7 +113,7 @@ ls .ai/tasks/{TICKET_ID}/review-{TICKET_ID}*.md 2>/dev/null | sort -V | tail -1
 
 ## 리뷰 문서 형식
 
-파일 경로: `.ai/tasks/{TICKET_ID}/review-{TICKET_ID}[-NN].md`
+파일 경로: `.ai/tasks/{TICKET_ID}/code_review/review-{TICKET_ID}[-NN].md`
 
 ```markdown
 # Code Review Report
@@ -178,7 +178,7 @@ ls .ai/tasks/{TICKET_ID}/review-{TICKET_ID}*.md 2>/dev/null | sort -V | tail -1
 
 1. **리뷰 문서 경로** 안내
    ```
-   📄 리뷰 문서: .ai/tasks/{TICKET_ID}/review-{TICKET_ID}[-NN].md
+   📄 리뷰 문서: .ai/tasks/{TICKET_ID}/code_review/review-{TICKET_ID}[-NN].md
    ```
 2. **버전 정보** (이전 리뷰 존재 시)
    ```
@@ -196,7 +196,7 @@ ls .ai/tasks/{TICKET_ID}/review-{TICKET_ID}*.md 2>/dev/null | sort -V | tail -1
 
 ```
 TICKET_ID: AUTH-123
-저장 경로: .ai/tasks/AUTH-123/
+저장 경로: .ai/tasks/AUTH-123/code_review/
 
 첫 번째 리뷰: review-AUTH-123.md
 두 번째 리뷰: review-AUTH-123-01.md
@@ -207,7 +207,7 @@ TICKET_ID: AUTH-123
 
 ```
 TICKET_ID: update-readme
-저장 경로: .ai/tasks/update-readme/
+저장 경로: .ai/tasks/update-readme/code_review/
 
 첫 번째 리뷰: review-update-readme.md
 두 번째 리뷰: review-update-readme-01.md
