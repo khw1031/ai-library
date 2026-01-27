@@ -1,9 +1,10 @@
 ---
 name: code-reviewer
 description: >
-  커밋 전 코드 리뷰 수행. git diff 기반 변경 사항 분석 후 
+  커밋 전 코드 리뷰 수행. git diff 기반 변경 사항 분석 후
   CRITICAL 이슈가 없을 때까지 자동 반복 검토.
-  코드 리뷰, 리뷰 요청, 커밋 전 검토 시 사용.
+  트리거: 코드리뷰, 코드 리뷰, code review, 리뷰해줘, 리뷰 요청,
+  코드검토, 코드 검토, 커밋 전 검토, PR 리뷰, 변경사항 검토.
 tools:
   - Read
   - Grep
