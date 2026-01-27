@@ -1,6 +1,6 @@
 # Project Rule Generator
 
-> 프로젝트의 의존성, PRD, 구조를 분석하여 필수/선택 Rule을 자동 생성합니다.
+> 프로젝트의 의존성, PRD, 구조를 분석하여 카테고리별 Rule을 자동 생성합니다.
 
 ## 목적
 
@@ -8,30 +8,35 @@
 
 1. **의존성 분석**: package.json 등에서 기술 스택 + 버전 파악
 2. **최신 정보 검색**: WebSearch로 버전별 베스트 프랙티스 확인
-3. **단일 파일 규칙**: 각 규칙은 `rule-name.md` 파일로 관리
-4. **그룹화**: 관련 규칙은 디렉토리로 그룹화 + 인덱스(AGENTS.md) 포함
+3. **카테고리 기반 구조**: 기본적으로 규칙을 카테고리별로 그룹화
+4. **목차 제공**: 루트 인덱스에 카테고리별 목차 포함
 
-## 생성되는 구조
+## 생성되는 구조 (카테고리 기반)
 
 ```
 .claude/rules/
-├── AGENTS.md              # 전체 인덱스
+├── AGENTS.md              # 전체 인덱스 + 목차
 ├── CLAUDE.md
 │
-│   # 단일 파일 규칙
-├── typescript.md
-├── architecture.md
+├── core/                  # 핵심 규칙 카테고리
+│   ├── AGENTS.md
+│   ├── typescript.md
+│   └── architecture.md
 │
-│   # 그룹화 디렉토리
-├── frontend/
-│   ├── AGENTS.md          # 그룹 인덱스
+├── frontend/              # 프론트엔드 카테고리
+│   ├── AGENTS.md
 │   ├── react.md
 │   └── components.md
 │
-└── prd/
-    ├── AGENTS.md          # 그룹 인덱스
-    ├── user-stories.md
-    └── specs.md
+├── testing/               # 테스트 카테고리
+│   ├── AGENTS.md
+│   └── unit.md
+│
+└── docs/                  # 문서 기반 카테고리
+    ├── AGENTS.md
+    └── prd/
+        ├── AGENTS.md
+        └── overview.md
 ```
 
 ## 의존 스킬

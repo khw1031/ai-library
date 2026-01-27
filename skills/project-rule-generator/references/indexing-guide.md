@@ -60,7 +60,7 @@ paths:
 
 ## 2. 인덱스 파일 구조
 
-### 2.1 프로젝트 루트 인덱스
+### 2.1 프로젝트 루트 인덱스 (목차 포함)
 
 `.claude/rules/AGENTS.md`:
 
@@ -77,28 +77,64 @@ paths:
 
 ---
 
-## 필수 규칙
+## 목차
+
+- [핵심 규칙 (Core)](#핵심-규칙-core)
+- [프론트엔드 (Frontend)](#프론트엔드-frontend)
+- [테스트 (Testing)](#테스트-testing)
+- [문서 (Docs)](#문서-docs)
+
+---
+
+## 핵심 규칙 (Core)
+
+> 모든 코드에 적용되는 기본 규칙
 
 | 규칙 | 적용 대상 | 설명 |
 |------|----------|------|
-| [typescript](typescript.md) | `**/*.ts{,x}` | TypeScript 컨벤션 |
-| [architecture](architecture.md) | 전역 | 프로젝트 구조 원칙 |
-| [react](react.md) | `**/*.tsx` | React 컴포넌트 패턴 |
+| [typescript](core/typescript.md) | `**/*.ts{,x}` | TypeScript 컨벤션 |
+| [architecture](core/architecture.md) | 전역 | 프로젝트 구조 원칙 |
 
-## 선택 규칙
+→ 상세: [core/AGENTS.md](core/AGENTS.md)
 
-| 규칙 | 트리거 | 설명 |
-|------|--------|------|
-| [testing](testing.md) | `**/*.test.*` | 테스트 작성 가이드 |
-| [api](api.md) | `app/api/**` | API 엔드포인트 규칙 |
-| [prd](prd/) | 기획 참조 시 | PRD 상세 (디렉토리) |
+---
 
-## 상세 문서
+## 프론트엔드 (Frontend)
 
-| 문서 | 설명 |
-|------|------|
-| [ARCHITECTURE.md](../docs/ARCHITECTURE.md) | 전체 아키텍처 |
-| [API.md](../docs/API.md) | API 명세 |
+> UI, 컴포넌트, 상태관리 규칙
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [react](frontend/react.md) | `**/*.tsx` | React 컴포넌트 패턴 |
+| [components](frontend/components.md) | `**/components/**` | 컴포넌트 구조 |
+
+→ 상세: [frontend/AGENTS.md](frontend/AGENTS.md)
+
+---
+
+## 테스트 (Testing)
+
+> 테스트 작성 규칙 (조건부 활성화)
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [unit](testing/unit.md) | `**/*.test.*` | 단위 테스트 가이드 |
+| [e2e](testing/e2e.md) | `e2e/**` | E2E 테스트 가이드 |
+
+→ 상세: [testing/AGENTS.md](testing/AGENTS.md)
+
+---
+
+## 문서 (Docs)
+
+> PRD, API 스펙 등 문서 기반 규칙
+
+| 문서 | 설명 | 참조 |
+|------|------|------|
+| [PRD](docs/prd/) | 제품 요구사항 | 기획 참조 시 |
+| [API 스펙](docs/api-spec/) | API 명세 | API 개발 시 |
+
+→ 상세: [docs/AGENTS.md](docs/AGENTS.md)
 ```
 
 ### 2.2 디렉토리 규칙 인덱스
@@ -162,53 +198,79 @@ paths:
 
 ## 4. 인덱싱 전략
 
-### 4.1 작은 프로젝트 (규칙 5개 이하)
+### 4.1 기본 전략: 카테고리 기반 구조
 
-모든 규칙을 플랫하게 관리:
+**기본적으로 모든 규칙을 카테고리별로 그룹화하고 목차를 제공합니다.**
+
+```
+.claude/rules/
+├── AGENTS.md              # 전체 인덱스 + 목차
+├── CLAUDE.md
+│
+├── core/                  # 핵심 규칙 카테고리
+│   ├── AGENTS.md
+│   ├── typescript.md
+│   └── architecture.md
+│
+├── frontend/              # 프론트엔드 카테고리
+│   ├── AGENTS.md
+│   ├── react.md
+│   └── components.md
+│
+├── testing/               # 테스트 카테고리
+│   ├── AGENTS.md
+│   └── unit.md
+│
+└── docs/                  # 문서 기반 카테고리
+    └── AGENTS.md
+```
+
+### 4.2 예외: 플랫 구조 (규칙 2-3개)
+
+규칙이 매우 적은 경우에만 플랫 구조 허용:
 
 ```
 .claude/rules/
 ├── AGENTS.md
+├── CLAUDE.md
 ├── typescript.md
-├── react.md
-├── testing.md
 └── architecture.md
 ```
 
-### 4.2 중간 프로젝트 (규칙 6-15개)
-
-카테고리별 그룹화:
-
-```
-.claude/rules/
-├── AGENTS.md              # 전체 인덱스
-├── typescript.md          # 필수
-├── react.md               # 필수
-├── architecture.md        # 필수
-├── testing.md             # 선택 (paths)
-├── api.md                 # 선택 (paths)
-└── domain/                # 도메인 규칙 그룹
-    ├── AGENTS.md
-    ├── RULE.md
-    └── references/
-```
+**플랫 구조 조건:**
+- 전체 규칙이 2-3개 이하
+- 모든 규칙이 동일 카테고리에 속함
+- 확장 가능성이 낮음
 
 ### 4.3 큰 프로젝트 (규칙 15개 이상)
 
-계층적 디렉토리 구조:
+계층적 디렉토리 구조 + 하위 카테고리:
 
 ```
 .claude/rules/
-├── AGENTS.md              # 메인 인덱스
+├── AGENTS.md              # 메인 인덱스 + 목차
 ├── CLAUDE.md
 │
 ├── core/                  # 핵심 규칙
 │   ├── AGENTS.md
 │   ├── typescript.md
-│   ├── react.md
-│   └── architecture.md
+│   ├── architecture.md
+│   └── coding-style.md
 │
-├── features/              # Feature별 규칙
+├── frontend/              # 프론트엔드 규칙
+│   ├── AGENTS.md
+│   ├── react.md
+│   ├── components.md
+│   ├── state-management.md
+│   └── styling.md
+│
+├── backend/               # 백엔드 규칙
+│   ├── AGENTS.md
+│   ├── api.md
+│   ├── database.md
+│   └── auth.md
+│
+├── features/              # Feature별 규칙 (도메인)
 │   ├── AGENTS.md
 │   ├── auth/
 │   ├── payment/
@@ -216,10 +278,17 @@ paths:
 │
 ├── testing/               # 테스트 규칙
 │   ├── AGENTS.md
-│   ├── RULE.md
-│   └── references/
+│   ├── unit.md
+│   ├── integration.md
+│   └── e2e.md
+│
+├── infra/                 # 인프라 규칙
+│   ├── AGENTS.md
+│   ├── docker.md
+│   └── ci-cd.md
 │
 └── docs/                  # 문서 기반 규칙
+    ├── AGENTS.md
     ├── prd/
     └── api-spec/
 ```

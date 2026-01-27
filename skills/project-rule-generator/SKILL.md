@@ -14,8 +14,8 @@ argument-hint: "[project-path?]"
 
 ## 핵심 원칙
 
-1. **단일 파일 규칙**: 각 규칙은 `rule-name.md` 파일로 관리
-2. **그룹화 디렉토리**: 관련 규칙들은 디렉토리로 그룹화 + 인덱스 파일 포함
+1. **카테고리 기반 구조**: 기본적으로 규칙을 카테고리별로 그룹화하고 목차를 제공
+2. **계층적 인덱스**: 루트 AGENTS.md에 카테고리별 목차 + 각 카테고리에 하위 인덱스
 3. **최신 정보 반영**: 웹 검색으로 기술 스택의 최신 베스트 프랙티스 확인
 4. **동적 규칙 생성**: 분석 결과를 기반으로 프로젝트에 맞는 규칙을 동적 생성
 
@@ -23,71 +23,111 @@ argument-hint: "[project-path?]"
 
 ## 규칙 구조
 
-### 기본 구조
+### 기본 구조 (카테고리 기반)
+
+**기본적으로 규칙을 카테고리별로 그룹화하고 목차를 제공합니다.**
 
 ```
 .claude/rules/
-├── AGENTS.md              # 전체 규칙 인덱스
+├── AGENTS.md              # 전체 인덱스 + 카테고리 목차
 ├── CLAUDE.md              # "AGENTS.md"
 │
-│   # 단일 파일 규칙 (간단한 규칙)
-├── typescript.md
-├── styling.md
-│
-│   # 그룹화 디렉토리 (관련 규칙 모음)
-├── frontend/
+│   # 카테고리별 그룹화 (기본)
+├── core/                  # 핵심 규칙
 │   ├── AGENTS.md          # 그룹 인덱스
+│   ├── typescript.md
+│   └── architecture.md
+│
+├── frontend/              # 프론트엔드 규칙
+│   ├── AGENTS.md
 │   ├── react.md
 │   ├── state-management.md
 │   └── components.md
 │
-└── prd/
-    ├── AGENTS.md          # 그룹 인덱스
-    ├── user-stories.md
-    └── functional-specs.md
+├── testing/               # 테스트 규칙
+│   ├── AGENTS.md
+│   ├── unit.md
+│   └── e2e.md
+│
+└── docs/                  # 문서 기반 규칙
+    ├── AGENTS.md
+    └── prd/
+        ├── AGENTS.md
+        └── overview.md
 ```
 
-### 단일 파일 규칙
+### 카테고리 분류 기준
 
-간단한 규칙은 단일 `.md` 파일로 작성:
+| 카테고리 | 포함 규칙 | 예시 |
+|----------|----------|------|
+| `core/` | 전역 적용, 언어/타입 규칙 | typescript.md, architecture.md |
+| `frontend/` | UI, 컴포넌트, 상태관리 | react.md, styling.md, state.md |
+| `backend/` | API, DB, 서버 로직 | api.md, database.md, auth.md |
+| `testing/` | 테스트 관련 | unit.md, integration.md, e2e.md |
+| `docs/` | 문서 기반 규칙 | prd/, api-spec/ |
+| `infra/` | 인프라, 배포 | docker.md, ci-cd.md |
 
-```yaml
+### 루트 인덱스 목차 구조 (AGENTS.md)
+
+```markdown
+# {프로젝트명} Rules
+
+> 프로젝트 규칙 인덱스
+
+## 목차
+
+- [핵심 규칙 (Core)](#핵심-규칙)
+- [프론트엔드 (Frontend)](#프론트엔드)
+- [백엔드 (Backend)](#백엔드)
+- [테스트 (Testing)](#테스트)
+- [문서 (Docs)](#문서)
+
 ---
-description: >
-  {무엇}을 위한 규칙. {언제/트리거} 시 활성화.
-paths:  # 선택 (조건부 활성화)
-  - "**/*.ts"
----
-
-# {규칙명}
 
 ## 핵심 규칙
 
-{규칙 내용}
+> 모든 코드에 적용되는 기본 규칙
 
-## 참조
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [typescript](core/typescript.md) | `**/*.ts{,x}` | TypeScript 컨벤션 |
+| [architecture](core/architecture.md) | 전역 | 프로젝트 구조 원칙 |
 
-- [관련 문서](링크)
+→ 상세: [core/AGENTS.md](core/AGENTS.md)
+
+---
+
+## 프론트엔드
+
+> UI 및 컴포넌트 관련 규칙
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [react](frontend/react.md) | `**/*.tsx` | React 패턴 |
+| [components](frontend/components.md) | `**/components/**` | 컴포넌트 구조 |
+
+→ 상세: [frontend/AGENTS.md](frontend/AGENTS.md)
+
+---
+
+## 테스트
+
+> 테스트 작성 관련 규칙
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [unit](testing/unit.md) | `**/*.test.*` | 단위 테스트 |
+| [e2e](testing/e2e.md) | `e2e/**` | E2E 테스트 |
+
+→ 상세: [testing/AGENTS.md](testing/AGENTS.md)
 ```
 
-### 그룹화 디렉토리
-
-관련 규칙이 여러 개일 때 디렉토리로 그룹화:
-
-```
-group-name/
-├── AGENTS.md          # 그룹 인덱스 (필수)
-├── rule-a.md          # 개별 규칙
-├── rule-b.md
-└── rule-c.md
-```
-
-**그룹 인덱스 (AGENTS.md) 작성:**
+### 그룹 인덱스 (카테고리별 AGENTS.md)
 
 ```markdown
-# {그룹명} Rules
+# {카테고리명} Rules
 
-> {그룹 설명}
+> {카테고리 설명}
 
 ## 규칙 목록
 
@@ -95,15 +135,28 @@ group-name/
 |------|------|--------|
 | [rule-a](rule-a.md) | 설명 | `**/*.tsx` |
 | [rule-b](rule-b.md) | 설명 | 컴포넌트 작성 시 |
+
+## 빠른 참조
+
+### {주요 개념 1}
+- 핵심 포인트 1
+- 핵심 포인트 2
+
+### {주요 개념 2}
+- 핵심 포인트 1
 ```
 
-### 그룹화 기준
+### 플랫 구조 (예외: 규칙 2-3개)
 
-| 기준 | 예시 |
-|------|------|
-| 기술 레이어 | `frontend/`, `backend/`, `infrastructure/` |
-| 도메인 | `prd/`, `auth/`, `payment/` |
-| 관심사 | `testing/`, `security/`, `performance/` |
+규칙이 매우 적은 경우에만 플랫 구조 허용:
+
+```
+.claude/rules/
+├── AGENTS.md
+├── CLAUDE.md
+├── typescript.md
+└── architecture.md
+```
 
 ---
 
@@ -181,30 +234,44 @@ src/ 또는 app/ 구조 → 아키텍처 패턴 파악
          └── 특정 모듈 규칙
 ```
 
-#### 3.2 단일 파일 vs 그룹화 결정
+#### 3.2 카테고리 분류
+
+**기본적으로 모든 규칙을 카테고리별로 그룹화합니다.**
 
 ```
-[각 규칙에 대해]
+[분석된 규칙들]
     │
-    ├─── 독립적인 단일 주제
-    │    → 단일 파일: rule-name.md
+    ├─── 언어/타입/전역 규칙
+    │    → core/ 카테고리
     │
-    └─── 관련 규칙이 3개 이상
-         → 그룹화 디렉토리: group-name/
-              ├── AGENTS.md (인덱스)
-              ├── rule-a.md
-              ├── rule-b.md
-              └── rule-c.md
+    ├─── UI/컴포넌트/상태관리
+    │    → frontend/ 카테고리
+    │
+    ├─── API/DB/서버 로직
+    │    → backend/ 카테고리
+    │
+    ├─── 테스트 관련
+    │    → testing/ 카테고리
+    │
+    ├─── 문서 기반 (PRD, 스펙)
+    │    → docs/ 카테고리
+    │
+    └─── 인프라/배포
+         → infra/ 카테고리
 ```
 
-**그룹화 권장 케이스:**
+**카테고리별 규칙 예시:**
 
-| 케이스 | 그룹명 | 포함 규칙 |
-|--------|--------|----------|
-| 프론트엔드 규칙 3개 이상 | `frontend/` | react.md, state.md, components.md |
-| 백엔드 규칙 3개 이상 | `backend/` | api.md, database.md, auth.md |
-| PRD 관련 문서 | `prd/` | overview.md, user-stories.md, specs.md |
-| 테스트 규칙 세분화 | `testing/` | unit.md, integration.md, e2e.md |
+| 카테고리 | 포함 규칙 | paths 예시 |
+|----------|----------|-----------|
+| `core/` | typescript.md, architecture.md, coding-style.md | `**/*.ts{,x}` |
+| `frontend/` | react.md, state.md, components.md, styling.md | `**/*.tsx`, `**/components/**` |
+| `backend/` | api.md, database.md, auth.md, validation.md | `**/api/**`, `**/services/**` |
+| `testing/` | unit.md, integration.md, e2e.md | `**/*.test.*`, `e2e/**` |
+| `docs/` | prd/, api-spec/, onboarding.md | 문서 참조 시 |
+| `infra/` | docker.md, ci-cd.md, deployment.md | `Dockerfile`, `.github/**` |
+
+**예외: 규칙이 2-3개인 경우 플랫 구조 허용**
 
 ---
 
@@ -241,77 +308,137 @@ rule-structurizer 스킬을 설치하세요:
 
 ### 5단계: 구조 생성 및 검증
 
-#### 생성 구조 예시
+#### 생성 구조 예시 (카테고리 기반)
 
 ```
 .claude/rules/
-├── AGENTS.md                 # 전체 인덱스
+├── AGENTS.md                 # 전체 인덱스 + 목차
 ├── CLAUDE.md
 │
-│   # 단일 파일 규칙
-├── typescript.md             # 필수
-├── architecture.md           # 필수
-├── styling.md                # 필수
+├── core/                     # 핵심 규칙 카테고리
+│   ├── AGENTS.md             # 카테고리 인덱스
+│   ├── typescript.md
+│   ├── architecture.md
+│   └── coding-style.md
 │
-│   # 그룹화 디렉토리
-├── frontend/                 # React 관련 규칙 그룹
-│   ├── AGENTS.md             # 그룹 인덱스
+├── frontend/                 # 프론트엔드 카테고리
+│   ├── AGENTS.md
 │   ├── react.md
 │   ├── state-management.md
-│   └── components.md
+│   ├── components.md
+│   └── styling.md
 │
-├── testing/                  # 테스트 관련 규칙 그룹
+├── backend/                  # 백엔드 카테고리 (있는 경우)
+│   ├── AGENTS.md
+│   ├── api.md
+│   └── database.md
+│
+├── testing/                  # 테스트 카테고리
 │   ├── AGENTS.md
 │   ├── unit.md
 │   └── e2e.md
 │
-└── prd/                      # PRD 관련 문서 그룹
+└── docs/                     # 문서 기반 카테고리
     ├── AGENTS.md
-    ├── overview.md
-    ├── user-stories.md
-    └── functional-specs.md
+    └── prd/
+        ├── AGENTS.md
+        ├── overview.md
+        ├── user-stories.md
+        └── functional-specs.md
 ```
 
-#### 루트 인덱스 (AGENTS.md) 작성
+#### 루트 인덱스 (AGENTS.md) 작성 - 목차 포함
 
 ```markdown
 # {프로젝트명} Rules
 
 > 프로젝트 규칙 인덱스
 
-## 단일 규칙
+## 목차
 
-| 규칙 | 트리거 | 설명 |
-|------|--------|------|
-| [typescript](typescript.md) | `**/*.ts` | TypeScript 컨벤션 |
-| [architecture](architecture.md) | 구조 설계 시 | 아키텍처 원칙 |
-| [styling](styling.md) | `**/*.css` | 스타일링 규칙 |
+- [핵심 규칙 (Core)](#핵심-규칙-core)
+- [프론트엔드 (Frontend)](#프론트엔드-frontend)
+- [백엔드 (Backend)](#백엔드-backend)
+- [테스트 (Testing)](#테스트-testing)
+- [문서 (Docs)](#문서-docs)
 
-## 규칙 그룹
+---
 
-| 그룹 | 설명 | 참조 |
+## 핵심 규칙 (Core)
+
+> 모든 코드에 적용되는 기본 규칙
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [typescript](core/typescript.md) | `**/*.ts{,x}` | TypeScript 컨벤션 |
+| [architecture](core/architecture.md) | 전역 | 아키텍처 원칙 |
+| [coding-style](core/coding-style.md) | 전역 | 코딩 스타일 |
+
+→ 상세: [core/AGENTS.md](core/AGENTS.md)
+
+---
+
+## 프론트엔드 (Frontend)
+
+> UI, 컴포넌트, 상태관리 규칙
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [react](frontend/react.md) | `**/*.tsx` | React 패턴 |
+| [components](frontend/components.md) | `**/components/**` | 컴포넌트 구조 |
+| [styling](frontend/styling.md) | `**/*.css` | 스타일링 규칙 |
+
+→ 상세: [frontend/AGENTS.md](frontend/AGENTS.md)
+
+---
+
+## 테스트 (Testing)
+
+> 테스트 작성 규칙 (조건부 활성화)
+
+| 규칙 | 적용 대상 | 설명 |
+|------|----------|------|
+| [unit](testing/unit.md) | `**/*.test.*` | 단위 테스트 |
+| [e2e](testing/e2e.md) | `e2e/**` | E2E 테스트 |
+
+→ 상세: [testing/AGENTS.md](testing/AGENTS.md)
+
+---
+
+## 문서 (Docs)
+
+> PRD, API 스펙 등 문서 기반 규칙
+
+| 문서 | 설명 | 참조 |
 |------|------|------|
-| [frontend](frontend/) | 프론트엔드 관련 규칙 | React, 상태관리, 컴포넌트 |
-| [testing](testing/) | 테스트 관련 규칙 | Unit, E2E |
-| [prd](prd/) | PRD 문서 | 요구사항, 스펙 |
+| [PRD](docs/prd/) | 제품 요구사항 | 기획 참조 시 |
+
+→ 상세: [docs/AGENTS.md](docs/AGENTS.md)
 ```
 
 #### 검증 체크리스트
 
 ```
 구조 검증:
-□ 루트 AGENTS.md가 모든 규칙/그룹을 인덱싱하는가?
-□ 그룹 디렉토리에 AGENTS.md 인덱스가 있는가?
+□ 루트 AGENTS.md에 목차가 있는가?
+□ 규칙이 적절한 카테고리에 분류되었는가?
+□ 각 카테고리에 AGENTS.md 인덱스가 있는가?
 □ 각 규칙 파일에 frontmatter(description)가 있는가?
+
+목차 검증:
+□ 목차의 링크가 해당 섹션으로 연결되는가?
+□ 각 카테고리 섹션에 "→ 상세" 링크가 있는가?
+□ 카테고리별 대표 규칙이 테이블에 표시되는가?
 
 내용 검증:
 □ 규칙이 최신 베스트 프랙티스를 반영하는가?
 □ 기존 린터/설정과 충돌하지 않는가?
 □ deprecated 패턴이 권장되고 있지 않은가?
 
-그룹화 검증:
-□ 관련 규칙이 적절히 그룹화되었는가?
-□ 그룹 인덱스가 하위 규칙을 명확히 안내하는가?
+카테고리 검증:
+□ 규칙이 적절한 카테고리에 배치되었는가?
+□ 카테고리 인덱스가 하위 규칙을 명확히 안내하는가?
+□ 빈 카테고리가 없는가? (최소 1개 규칙)
 ```
 
 ---
