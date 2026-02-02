@@ -19,6 +19,7 @@
    - 예: 타입 정의 → `typescript/AGENTS.md`
 
 **빠른 체크:**
+
 ```
 □ MUST/workflow-rule.md 로드함
 □ Step 4 입력 파일: 20-output-system-design.md, 30-output-task.md, todos/*.md 존재 확인
@@ -61,6 +62,7 @@ Task 도구를 사용하여 general-purpose 또는 적합한 전문 Agent 호출
 ```
 
 **병렬 실행 가능 태스크**:
+
 - Step 3의 dependency graph에서 독립적인 태스크는 병렬로 Agent 호출
 - 의존성이 있는 태스크는 순차적으로 실행
 

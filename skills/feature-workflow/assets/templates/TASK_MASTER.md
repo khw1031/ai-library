@@ -14,6 +14,7 @@
 ### TDD 원칙
 
 **각 태스크는 다음 순서로 진행:**
+
 1. 관련 TS-xxx 테스트 코드 먼저 작성
 2. 테스트 실패 확인 (Red)
 3. 구현 코드 작성 (Green)
@@ -22,16 +23,19 @@
 ### 코드 패턴 가이드 (Step 2 6.1에서)
 
 **Hook 패턴:**
+
 ```typescript
 // 참조: [Step 2에서 정의한 경로]
 ```
 
 **컴포넌트 패턴:**
+
 ```typescript
 // 참조: [Step 2에서 정의한 경로]
 ```
 
 **API 호출 패턴:**
+
 ```typescript
 // 참조: [Step 2에서 정의한 경로]
 ```
@@ -47,6 +51,7 @@
 ### 완료 조건 (Step 2 7.2에서)
 
 각 태스크 완료 시 다음을 확인:
+
 - [ ] 관련 TS-xxx 테스트 모두 통과
 - [ ] 코드 패턴 가이드 준수
 - [ ] 금지 사항 위반 없음
@@ -83,13 +88,13 @@ git commit -m "feat(PROJ-001): implement API client - task-02"
 
 ### Step 2 파일별 구현 계획 → 태스크 매핑
 
-| Step 2 파일 | 태스크 | 관련 TS |
-|------------|--------|---------|
-| types/feature.types.ts | 01-TASK | - |
-| api/feature.api.ts | 02-TASK | TS-101, TS-102 |
-| hooks/useFeature.ts | 03-TASK | TS-001, TS-002 |
-| components/Feature.tsx | 04-TASK | - |
-| __tests__/* | 05-TASK | 전체 TS |
+| Step 2 파일            | 태스크  | 관련 TS        |
+| ---------------------- | ------- | -------------- |
+| types/feature.types.ts | 01-TASK | -              |
+| api/feature.api.ts     | 02-TASK | TS-101, TS-102 |
+| hooks/useFeature.ts    | 03-TASK | TS-001, TS-002 |
+| components/Feature.tsx | 04-TASK | -              |
+| **tests**/\*           | 05-TASK | 전체 TS        |
 
 ### 우선순위별 분류
 
@@ -140,13 +145,13 @@ graph TD
 
 ## 진행 상황
 
-| 태스크 | 파일 | 관련 TS | 상태 | 테스트 결과 | 완료일 |
-|--------|------|---------|------|------------|--------|
-| 01-TASK | types | - | pending | - | - |
-| 02-TASK | api | TS-101, TS-102 | pending | - | - |
-| 03-TASK | hooks | TS-001, TS-002 | pending | - | - |
-| 04-TASK | components | - | pending | - | - |
-| 05-TASK | tests | 전체 TS | pending | - | - |
+| 태스크  | 파일       | 관련 TS        | 상태    | 테스트 결과 | 완료일 |
+| ------- | ---------- | -------------- | ------- | ----------- | ------ |
+| 01-TASK | types      | -              | pending | -           | -      |
+| 02-TASK | api        | TS-101, TS-102 | pending | -           | -      |
+| 03-TASK | hooks      | TS-001, TS-002 | pending | -           | -      |
+| 04-TASK | components | -              | pending | -           | -      |
+| 05-TASK | tests      | 전체 TS        | pending | -           | -      |
 
 ---
 
@@ -154,12 +159,12 @@ graph TD
 
 > Step 1에서 정의한 테스트 시나리오의 구현 현황
 
-| TS ID | 시나리오 | 담당 태스크 | 구현 상태 | 테스트 결과 |
-|-------|----------|------------|----------|------------|
-| TS-001 | [시나리오명] | 03-TASK | pending | - |
-| TS-002 | [시나리오명] | 03-TASK | pending | - |
-| TS-101 | [시나리오명] | 02-TASK | pending | - |
-| TS-102 | [시나리오명] | 02-TASK | pending | - |
+| TS ID  | 시나리오     | 담당 태스크 | 구현 상태 | 테스트 결과 |
+| ------ | ------------ | ----------- | --------- | ----------- |
+| TS-001 | [시나리오명] | 03-TASK     | pending   | -           |
+| TS-002 | [시나리오명] | 03-TASK     | pending   | -           |
+| TS-101 | [시나리오명] | 02-TASK     | pending   | -           |
+| TS-102 | [시나리오명] | 02-TASK     | pending   | -           |
 
 ---
 
@@ -168,6 +173,7 @@ graph TD
 ### 태스크 레벨
 
 각 태스크 완료 시:
+
 - [ ] 관련 TS-xxx 테스트 통과
 - [ ] 코드 패턴 준수
 - [ ] 금지 사항 위반 없음
@@ -177,6 +183,7 @@ graph TD
 ### 전체 완료
 
 모든 서브태스크 완료 후:
+
 - [ ] 모든 TS-xxx 테스트 통과
 - [ ] 전체 통합 테스트 통과
 - [ ] Step 2 7.2 리뷰 체크포인트 충족
@@ -205,6 +212,7 @@ graph TD
 ```
 
 **포함 내용**:
+
 - Step 2 설계 대비 구현 현황
 - TS-xxx 테스트 검증 결과
 - 리뷰 체크포인트 검증 결과

@@ -19,7 +19,7 @@ description: |
 license: MIT
 metadata:
   author: ai-toolkit
-  version: "1.0.0"
+  version: '1.0.0'
   category: workflow
 allowed-tools: Bash Read Write Edit Glob Grep
 ---
@@ -65,13 +65,13 @@ Step 4: Implementation  → 코드 구현 및 테스트
 Step 5: Review          → 검토 및 문서화
 ```
 
-| Step | 역할 | 입력 | 출력 | 상세 |
-|------|------|------|------|------|
-| 1 | Requirements Analyst | 00-user-prompt.md | 10-output-plan.md | [references/step-1.md](references/step-1.md) |
-| 2 | System Designer | 10-output-plan.md | 20-output-system-design.md | [references/step-2.md](references/step-2.md) |
-| 3 | Task Analyzer | 10+20 | 30-output-task.md + todos/ | [references/step-3.md](references/step-3.md) |
-| 4 | Developer | 20-output-system-design.md | 40-output-implementation.md | [references/step-4.md](references/step-4.md) |
-| 5 | Reviewer | 40-output-implementation.md | 50-output-review.md | [references/step-5.md](references/step-5.md) |
+| Step | 역할                 | 입력                        | 출력                        | 상세                                         |
+| ---- | -------------------- | --------------------------- | --------------------------- | -------------------------------------------- |
+| 1    | Requirements Analyst | 00-user-prompt.md           | 10-output-plan.md           | [references/step-1.md](references/step-1.md) |
+| 2    | System Designer      | 10-output-plan.md           | 20-output-system-design.md  | [references/step-2.md](references/step-2.md) |
+| 3    | Task Analyzer        | 10+20                       | 30-output-task.md + todos/  | [references/step-3.md](references/step-3.md) |
+| 4    | Developer            | 20-output-system-design.md  | 40-output-implementation.md | [references/step-4.md](references/step-4.md) |
+| 5    | Reviewer             | 40-output-implementation.md | 50-output-review.md         | [references/step-5.md](references/step-5.md) |
 
 ---
 
@@ -90,6 +90,7 @@ Step 5: Review          → 검토 및 문서화
 **사용자가 `.ai/tasks/<TASK_ID>/` 경로를 언급하거나 "작업 이어서" 요청 시:**
 
 1. **status.yaml 읽기**:
+
    ```bash
    cat .ai/tasks/<TASK_ID>/status.yaml
    ```
@@ -108,6 +109,7 @@ Step 5: Review          → 검토 및 문서화
    - 현재 Step의 status가 `completed` → 다음 Step으로 이동
 
 5. **사용자에게 안내**:
+
    ```
    📍 현재 상태: Step X (상태)
    📋 완료된 Step: Step 1, Step 2, ...
@@ -117,6 +119,7 @@ Step 5: Review          → 검토 및 문서화
    ```
 
 **수동 재개 명령어**:
+
 ```
 "<TASK_ID> 작업 이어서 진행해줘"
 "<TASK_ID> Step 2 시작"
@@ -130,6 +133,7 @@ Step 5: Review          → 검토 및 문서화
 각 Step의 상세 내용은 아래 참조 문서를 확인하세요:
 
 ### Step 1: Requirements Analysis
+
 - **역할**: Requirements Analyst
 - **목표**: 사용자 요구사항을 명확히 이해하고 구조화된 문서로 정리
 - **입력**: `.ai/tasks/<TASK_ID>/00-user-prompt.md`
@@ -138,6 +142,7 @@ Step 5: Review          → 검토 및 문서화
 - **상세**: [references/step-1.md](references/step-1.md)
 
 ### Step 2: Design & Planning
+
 - **역할**: System Designer
 - **목표**: 요구사항을 기반으로 구현 가능한 설계 및 계획 수립
 - **입력**: `.ai/tasks/<TASK_ID>/10-output-plan.md`
@@ -146,6 +151,7 @@ Step 5: Review          → 검토 및 문서화
 - **상세**: [references/step-2.md](references/step-2.md)
 
 ### Step 3: Task Analysis
+
 - **역할**: Task Analyzer
 - **목표**: 설계를 작은 구현 작업으로 분해하고 병렬화 계획 수립
 - **입력**:
@@ -159,6 +165,7 @@ Step 5: Review          → 검토 및 문서화
 - **상세**: [references/step-3.md](references/step-3.md)
 
 ### Step 4: Implementation
+
 - **역할**: Coordinator (Task Executor Agent 조율)
 - **목표**: Task Executor Agent를 활용하여 설계에 따라 코드를 구현하고 테스트
 - **입력**:
@@ -173,6 +180,7 @@ Step 5: Review          → 검토 및 문서화
 - **상세**: [references/step-4.md](references/step-4.md)
 
 ### Step 5: Review & Documentation
+
 - **역할**: Reviewer
 - **목표**: 구현 결과 검토, 문서화, PR 준비
 - **입력**: `.ai/tasks/<TASK_ID>/40-output-implementation.md`

@@ -14,22 +14,22 @@
 MUST/AGENTS.md → MUST/workflow-rule.md
 ```
 
-| 디렉토리 | 설명 | 로드 시점 |
-|---------|------|----------|
-| `MUST/` | 워크플로우 실행 필수 규칙 | **항상** (Step 시작 시) |
+| 디렉토리 | 설명                      | 로드 시점               |
+| -------- | ------------------------- | ----------------------- |
+| `MUST/`  | 워크플로우 실행 필수 규칙 | **항상** (Step 시작 시) |
 
 ### 2. 도메인 규칙 (동적 로드)
 
 작업 중 해당 컨텍스트를 만나면 규칙을 로드하세요:
 
-| 키워드/컨텍스트 | 디렉토리 | 로드 시점 |
-|---------------|---------|----------|
-| React, 컴포넌트, JSX, TSX, hooks | `react/` | 계획/구현/리뷰 |
-| 테스트, test, spec, TDD, Given-When-Then | `testing/` | 테스트 작성 |
-| API, endpoint, fetch, axios, REST | `api/` | API 작업 |
-| 타입, interface, type, generic | `typescript/` | 타입 정의 |
-| 상태관리, state, store, reducer | `state/` | 상태 설계/구현 |
-| 스타일, CSS, styled, tailwind | `styling/` | UI 스타일링 |
+| 키워드/컨텍스트                          | 디렉토리      | 로드 시점      |
+| ---------------------------------------- | ------------- | -------------- |
+| React, 컴포넌트, JSX, TSX, hooks         | `react/`      | 계획/구현/리뷰 |
+| 테스트, test, spec, TDD, Given-When-Then | `testing/`    | 테스트 작성    |
+| API, endpoint, fetch, axios, REST        | `api/`        | API 작업       |
+| 타입, interface, type, generic           | `typescript/` | 타입 정의      |
+| 상태관리, state, store, reducer          | `state/`      | 상태 설계/구현 |
+| 스타일, CSS, styled, tailwind            | `styling/`    | UI 스타일링    |
 
 > 디렉토리가 존재하지 않으면 건너뛰세요. 규칙은 점진적으로 추가됩니다.
 

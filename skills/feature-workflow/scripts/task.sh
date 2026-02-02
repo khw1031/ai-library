@@ -1,5 +1,5 @@
 #!/bin/bash
-# task.sh - Task lifecycle management for workflow skills
+# task.sh - Task lifecycle management for feature-workflow
 set -e
 
 COMMAND=${1:-help}
@@ -23,7 +23,7 @@ NC='\033[0m' # No Color
 
 show_help() {
   cat << EOF
-${BLUE}task.sh${NC} - Task lifecycle management
+${BLUE}task.sh${NC} - Task lifecycle management for feature-workflow
 
 ${YELLOW}Usage:${NC}
   task.sh <command> [options]
@@ -39,13 +39,27 @@ ${YELLOW}Examples:${NC}
   ./scripts/task.sh init PROJ-001
   ./scripts/task.sh status PROJ-001
   ./scripts/task.sh complete PROJ-001 step-1
-  ./scripts/task.sh complete PROJ-001 step-3 --finish
+  ./scripts/task.sh complete PROJ-001 step-5 --finish
 
 ${YELLOW}Task Directory:${NC}
   $TASKS_BASE/<TASK_ID>/
-  ├── status.yaml      # Task status
-  ├── input.md         # User input
-  └── output-*.md      # Step outputs
+  ├── status.yaml           # Task status
+  ├── 00-user-prompt.md     # User input (Step 1 input)
+  ├── 10-output-plan.md     # Step 1 output
+  ├── 20-output-system-design.md  # Step 2 output
+  ├── 30-output-task.md     # Step 3 output
+  ├── 40-output-implementation.md # Step 4 output
+  ├── 50-output-review.md   # Step 5 output
+  └── todos/                # Step 3+ subtasks
+      ├── 00-TASK_MASTER.md
+      └── 01-TASK.md, 02-TASK.md, ...
+
+${YELLOW}Workflow Steps:${NC}
+  Step 1: Requirements Analysis
+  Step 2: Design & Planning
+  Step 3: Task Analysis
+  Step 4: Implementation
+  Step 5: Review & Documentation
 EOF
 }
 
@@ -71,43 +85,41 @@ timestamp() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"
 }
 
-# Count steps from SKILL.md (looks for "## Step N:" or "## Step N.N:" pattern)
-count_steps() {
-  if [ -f "$SKILL_DIR/SKILL.md" ]; then
-    grep -c "^## Step [0-9]" "$SKILL_DIR/SKILL.md" 2>/dev/null || echo "0"
-  else
-    echo "0"
-  fi
-}
+# Fixed step list for feature-workflow (5 steps)
+STEPS=("step-1" "step-2" "step-3" "step-4" "step-5")
 
-# Get all step IDs from SKILL.md
-get_step_ids() {
-  if [ -f "$SKILL_DIR/SKILL.md" ]; then
-    grep "^## Step " "$SKILL_DIR/SKILL.md" | sed 's/^## Step \([0-9.]*\):.*/step-\1/' 2>/dev/null
-  fi
-}
+# Step descriptions
+declare -A STEP_NAMES
+STEP_NAMES["step-1"]="Requirements Analysis"
+STEP_NAMES["step-2"]="Design & Planning"
+STEP_NAMES["step-3"]="Task Analysis"
+STEP_NAMES["step-4"]="Implementation"
+STEP_NAMES["step-5"]="Review & Documentation"
 
-# Generate steps YAML based on step IDs
+# Generate steps YAML for status.yaml
 generate_steps_yaml() {
   local indent="  "
+  for step in "${STEPS[@]}"; do
+    echo "${indent}$step:"
+    echo "${indent}  status: pending"
+    echo "${indent}  name: \"${STEP_NAMES[$step]}\""
+  done
+}
 
-  # Get step IDs from SKILL.md
-  local step_ids
-  step_ids=$(get_step_ids)
-
-  if [ -z "$step_ids" ]; then
-    # Fallback to default steps
-    for i in 1 2 2.5 3 4; do
-      echo "${indent}step-$i:"
-      echo "${indent}  status: pending"
-    done
-  else
-    # Use step IDs from SKILL.md
-    while IFS= read -r step_id; do
-      echo "${indent}$step_id:"
-      echo "${indent}  status: pending"
-    done <<< "$step_ids"
-  fi
+# Get next step ID
+get_next_step() {
+  local current=$1
+  local found=0
+  for step in "${STEPS[@]}"; do
+    if [ "$found" -eq 1 ]; then
+      echo "$step"
+      return
+    fi
+    if [ "$step" = "$current" ]; then
+      found=1
+    fi
+  done
+  echo "" # No next step (last step)
 }
 
 cmd_init() {
@@ -122,6 +134,7 @@ cmd_init() {
   fi
 
   mkdir -p "$TASK_DIR"
+  mkdir -p "$TASK_DIR/todos"
 
   # Create status.yaml
   cat > "$TASK_DIR/status.yaml" << EOF
@@ -135,14 +148,14 @@ steps:
 $(generate_steps_yaml)
 EOF
 
-  # Copy input template if exists
-  if [ -f "$SKILL_DIR/assets/templates/input.md" ]; then
-    cp "$SKILL_DIR/assets/templates/input.md" "$TASK_DIR/input.md"
-    info "Input template copied"
+  # Copy input template (00-user-prompt.md) if exists
+  if [ -f "$SKILL_DIR/assets/templates/00-user-prompt.md" ]; then
+    cp "$SKILL_DIR/assets/templates/00-user-prompt.md" "$TASK_DIR/00-user-prompt.md"
+    info "Input template copied: 00-user-prompt.md"
   else
     # Create minimal input file
-    cat > "$TASK_DIR/input.md" << EOF
-# Task Input
+    cat > "$TASK_DIR/00-user-prompt.md" << EOF
+# User Prompt
 
 ## Task ID
 $TASK_ID
@@ -155,16 +168,21 @@ $TASK_ID
 
 ## Constraints
 <!-- Any limitations or requirements -->
+
+## Additional Context
+<!-- Any other relevant information -->
 EOF
   fi
 
   success "Task $TASK_ID created"
   echo ""
+  info "Task Directory: $TASK_DIR"
+  echo ""
   info "Next steps:"
-  echo "  1. Edit: $TASK_DIR/input.md"
-  echo "  2. Load rules: assets/rules/AGENTS.md"
-  echo "  3. Start Step 1: references/step-1.md"
-  echo "  4. Complete: ./scripts/task.sh complete $TASK_ID step-1"
+  echo "  1. Edit input: $TASK_DIR/00-user-prompt.md"
+  echo "  2. Load rules: Read assets/rules/AGENTS.md"
+  echo "  3. Start Step 1: Read references/step-1.md"
+  echo "  4. Complete Step 1: ./scripts/task.sh complete $TASK_ID step-1"
 }
 
 cmd_status() {
@@ -178,8 +196,23 @@ cmd_status() {
   echo ""
 
   # List output files
-  info "Files:"
-  ls -la "$TASK_DIR/" 2>/dev/null | grep -v "^total" | grep -v "^d" || echo "  (none)"
+  info "Output Files:"
+  for file in "$TASK_DIR"/*.md; do
+    if [ -f "$file" ]; then
+      echo "  $(basename "$file")"
+    fi
+  done
+
+  # List todo files if exist
+  if [ -d "$TASK_DIR/todos" ] && [ "$(ls -A "$TASK_DIR/todos" 2>/dev/null)" ]; then
+    echo ""
+    info "Todo Files:"
+    for file in "$TASK_DIR/todos"/*.md; do
+      if [ -f "$file" ]; then
+        echo "  todos/$(basename "$file")"
+      fi
+    done
+  fi
 }
 
 cmd_list() {
@@ -205,11 +238,17 @@ cmd_list() {
       local workflow
       workflow=$(grep "^workflow:" "$dir/status.yaml" | cut -d' ' -f2)
 
+      # Get step name
+      local step_name=""
+      if [ -n "$current_step" ]; then
+        step_name="${STEP_NAMES[$current_step]}"
+      fi
+
       case "$status" in
-        completed) echo -e "  ${GREEN}$task_id${NC} [$workflow] - $status" ;;
-        running)   echo -e "  ${YELLOW}$task_id${NC} [$workflow] - $status ($current_step)" ;;
-        failed)    echo -e "  ${RED}$task_id${NC} [$workflow] - $status" ;;
-        *)         echo "  $task_id [$workflow] - $status" ;;
+        completed) echo -e "  ${GREEN}✓${NC} $task_id [$workflow] - $status" ;;
+        running)   echo -e "  ${YELLOW}▶${NC} $task_id [$workflow] - $current_step ($step_name)" ;;
+        failed)    echo -e "  ${RED}✗${NC} $task_id [$workflow] - $status" ;;
+        *)         echo "  ? $task_id [$workflow] - $status" ;;
       esac
     fi
   done
@@ -223,24 +262,35 @@ cmd_complete() {
   [ -z "$STEP_ID" ] && error "STEP_ID required\nUsage: task.sh complete <TASK_ID> <STEP>"
   [ ! -f "$TASK_DIR/status.yaml" ] && error "Task $TASK_ID not found"
 
+  # Validate step ID
+  local valid_step=0
+  for step in "${STEPS[@]}"; do
+    if [ "$step" = "$STEP_ID" ]; then
+      valid_step=1
+      break
+    fi
+  done
+  [ "$valid_step" -eq 0 ] && error "Invalid step: $STEP_ID\nValid steps: ${STEPS[*]}"
+
   local now
   now=$(timestamp)
 
   # Update status.yaml using sed (portable approach)
-  # Update the step status
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
     sed -i '' "s/updated_at:.*/updated_at: $now/" "$TASK_DIR/status.yaml"
-    sed -i '' "/$STEP_ID:/,/status:/{s/status: pending/status: completed/;s/status: in_progress/status: completed/;}" "$TASK_DIR/status.yaml"
+    # Update step status to completed
+    sed -i '' "/$STEP_ID:/,/name:/{s/status: pending/status: completed/;s/status: in_progress/status: completed/;}" "$TASK_DIR/status.yaml"
   else
     # Linux
     sed -i "s/updated_at:.*/updated_at: $now/" "$TASK_DIR/status.yaml"
-    sed -i "/$STEP_ID:/,/status:/{s/status: pending/status: completed/;s/status: in_progress/status: completed/;}" "$TASK_DIR/status.yaml"
+    sed -i "/$STEP_ID:/,/name:/{s/status: pending/status: completed/;s/status: in_progress/status: completed/;}" "$TASK_DIR/status.yaml"
   fi
 
-  success "Step $STEP_ID completed"
+  success "Step $STEP_ID (${STEP_NAMES[$STEP_ID]}) completed"
 
-  if [ "$FLAG" = "--finish" ]; then
+  # Check if this is the last step or --finish flag
+  if [ "$FLAG" = "--finish" ] || [ "$STEP_ID" = "step-5" ]; then
     # Mark task as completed
     if [[ "$OSTYPE" == "darwin"* ]]; then
       sed -i '' "s/^status: running/status: completed/" "$TASK_DIR/status.yaml"
@@ -248,30 +298,33 @@ cmd_complete() {
       sed -i "s/^status: running/status: completed/" "$TASK_DIR/status.yaml"
     fi
     echo ""
-    success "Workflow completed!"
+    success "🎉 Workflow completed!"
     echo ""
     info "Task outputs:"
-    ls "$TASK_DIR/"*.md 2>/dev/null || echo "  (none)"
+    ls "$TASK_DIR"/*.md 2>/dev/null | while read -r f; do echo "  $(basename "$f")"; done
   else
     # Find next step
-    local step_num
-    step_num=$(echo "$STEP_ID" | grep -o '[0-9]*')
-    local next_step="step-$((step_num + 1))"
+    local next_step
+    next_step=$(get_next_step "$STEP_ID")
 
-    # Update current_step
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-      sed -i '' "s/current_step:.*/current_step: $next_step/" "$TASK_DIR/status.yaml"
-      sed -i '' "/$next_step:/,/status:/{s/status: pending/status: in_progress/;}" "$TASK_DIR/status.yaml"
-    else
-      sed -i "s/current_step:.*/current_step: $next_step/" "$TASK_DIR/status.yaml"
-      sed -i "/$next_step:/,/status:/{s/status: pending/status: in_progress/;}" "$TASK_DIR/status.yaml"
+    if [ -n "$next_step" ]; then
+      # Update current_step
+      if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s/current_step:.*/current_step: $next_step/" "$TASK_DIR/status.yaml"
+        sed -i '' "/$next_step:/,/name:/{s/status: pending/status: in_progress/;}" "$TASK_DIR/status.yaml"
+      else
+        sed -i "s/current_step:.*/current_step: $next_step/" "$TASK_DIR/status.yaml"
+        sed -i "/$next_step:/,/name:/{s/status: pending/status: in_progress/;}" "$TASK_DIR/status.yaml"
+      fi
+
+      echo ""
+      info "Next: $next_step (${STEP_NAMES[$next_step]})"
+      echo ""
+      echo "  1. Load rules: Read assets/rules/AGENTS.md"
+      echo "  2. Read step guide: references/$next_step.md"
+      echo ""
+      warn "💡 Recommended: Start a new conversation for the next step"
     fi
-
-    echo ""
-    info "Next: $next_step"
-    echo "  1. Load rules: assets/rules/AGENTS.md"
-    echo "  2. Read: references/$next_step.md"
-    warn "Recommended: Start a new conversation for the next step"
   fi
 }
 
