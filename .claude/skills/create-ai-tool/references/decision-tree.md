@@ -16,18 +16,6 @@
     │         │
     │         └─ NO: 메인 대화에서 실행 가능
     │                 │
-    │                 ├─── "특정 파일/경로에서만 활성화?"
-    │                 │         │
-    │                 │         ├─ YES → Rule (paths 사용)
-    │                 │         │
-    │                 │         └─ NO
-    │                 │               │
-    │                 │               └─── "사용자가 직접 호출하는 명령?"
-    │                 │                         │
-    │                 │                         ├─ YES → Skill
-    │                 │                         │
-    │                 │                         └─ NO → Rule 또는 Skill
-    │                 │
     │                 └─── "도구 제한이 필요한가?"
     │                           │
     │                           ├─ YES → Agent (tools/disallowedTools)
@@ -71,19 +59,14 @@
               └─ NO → 기본값 유지
 ```
 
+**Skill 생성하기** → `/create-skill` 또는 [create-skill](../../create-skill/SKILL.md)
+
 ---
 
 ## 3. Agent 세부 결정
 
 ```
 [Agent 선택됨]
-    │
-    ├─── "어떤 작업 유형인가?"
-    │         │
-    │         ├─ 빠른 탐색/검색 → model: haiku
-    │         ├─ 분석/리뷰 → model: sonnet
-    │         ├─ 복잡한 추론 → model: opus
-    │         └─ 메인과 동일 → model: inherit
     │
     ├─── "읽기 전용인가?"
     │         │
@@ -99,32 +82,32 @@
     │         ├─ 모든 권한 우회 → permissionMode: bypassPermissions
     │         └─ 기본 확인 → permissionMode: default
     │
-    └─── "사전 로드할 지식이 있는가?"
+    ├─── "사전 로드할 지식이 있는가?"
+    │         │
+    │         ├─ YES → skills: [스킬 목록]
+    │         │
+    │         └─ NO → 기본값 유지
+    │
+    └─── "자동 위임이 필요한가?"
               │
-              ├─ YES → skills: [스킬 목록]
+              ├─ YES → description에 "Use proactively" 패턴 추가
+              │        예: "Use proactively after code changes"
               │
-              └─ NO → 기본값 유지
+              └─ NO → 기본 description만 작성
 ```
+
+**Agent 생성하기** → `/create-agent` 또는 [create-agent](../../create-agent/SKILL.md)
 
 ---
 
-## 4. Rule 세부 결정
+## 4. Skills vs Agents 핵심 차이
 
-```
-[Rule 선택됨]
-    │
-    ├─── "특정 파일 패턴에서만 활성화?"
-    │         │
-    │         ├─ YES → paths: ["**/*.ts", "src/**"]
-    │         │
-    │         └─ NO → alwaysApply: true
-    │
-    └─── "상세 문서가 필요한가?"
-              │
-              ├─ YES → references/ 디렉토리 생성
-              │
-              └─ NO → 단일 파일 규칙
-```
+| 구분 | **Skills** | **Agents** |
+|------|-----------|------------|
+| **컨텍스트** | 메인 대화에서 실행 (공유) | 별도 컨텍스트 (격리) |
+| **목적** | 지식/지침 추가, 재사용 프롬프트 | 태스크 위임, 컨텍스트 분리 |
+| **호출** | `/skill-name` 또는 Claude 자동 | Claude가 태스크 위임 시 자동 |
+| **도구 제어** | `allowed-tools` | `tools`, `disallowedTools` |
 
 ---
 
@@ -163,46 +146,29 @@ skills:
 
 ---
 
-## 6. Skills vs Agents 핵심 차이
+## 6. 빌트인 Agents
 
-| 구분 | **Skills** | **Agents** |
-|------|-----------|------------|
-| **컨텍스트** | 메인 대화에서 실행 (공유) | 별도 컨텍스트 (격리) |
-| **목적** | 지식/지침 추가, 재사용 프롬프트 | 태스크 위임, 컨텍스트 분리 |
-| **호출** | `/skill-name` 또는 Claude 자동 | Claude가 태스크 위임 시 자동 |
-| **도구 제어** | `allowed-tools` | `tools`, `disallowedTools` |
-
----
-
-## 7. 빌트인 Agents
-
-| Agent | Model | 용도 |
-|-------|-------|------|
-| **Explore** | Haiku | 읽기 전용 탐색 |
-| **Plan** | Inherit | 계획 모드 컨텍스트 수집 |
-| **general-purpose** | Inherit | 복잡한 다단계 작업 |
+| Agent | 용도 |
+|-------|------|
+| **Explore** | 읽기 전용 탐색 |
+| **Plan** | 계획 모드 컨텍스트 수집 |
+| **general-purpose** | 복잡한 다단계 작업 |
 
 ---
 
-## 8. 판단 체크리스트
+## 7. 판단 체크리스트
 
 ### Agent가 적합한 경우
 
 - [ ] 테스트 실행 등 대량 출력 발생
 - [ ] 여러 모듈 병렬 조사
 - [ ] 특정 도구만 허용 (보안)
-- [ ] 다른 모델 사용 (비용 최적화)
 - [ ] 권한 모드 커스터마이징
 
-### Skill이 적합한 경우
+### Skill이 적합한 경우 (기본 선택)
 
 - [ ] 재사용 가능한 지침/패턴
 - [ ] `/명령어`로 직접 호출
 - [ ] 메인 컨텍스트 공유 필요
 - [ ] 동적 컨텍스트 주입 (`!`command``)
-
-### Rule이 적합한 경우
-
-- [ ] 특정 파일 타입에만 적용 (`.ts`, `.py`)
-- [ ] 특정 디렉토리에만 적용 (`src/`, `tests/`)
-- [ ] 항상 적용되는 프로젝트 규칙
+- [ ] 격리 실행 필요 시 `context: fork` 사용
