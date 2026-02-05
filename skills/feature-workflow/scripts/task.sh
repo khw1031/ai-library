@@ -88,13 +88,17 @@ timestamp() {
 # Fixed step list for feature-workflow (5 steps)
 STEPS=("step-1" "step-2" "step-3" "step-4" "step-5")
 
-# Step descriptions
-declare -A STEP_NAMES
-STEP_NAMES["step-1"]="Requirements Analysis"
-STEP_NAMES["step-2"]="Design & Planning"
-STEP_NAMES["step-3"]="Task Analysis"
-STEP_NAMES["step-4"]="Implementation"
-STEP_NAMES["step-5"]="Review & Documentation"
+# Step descriptions (bash 3.2 compatible - no associative arrays)
+get_step_name() {
+  case "$1" in
+    step-1) echo "Requirements Analysis" ;;
+    step-2) echo "Design & Planning" ;;
+    step-3) echo "Task Analysis" ;;
+    step-4) echo "Implementation" ;;
+    step-5) echo "Review & Documentation" ;;
+    *) echo "" ;;
+  esac
+}
 
 # Generate steps YAML for status.yaml
 generate_steps_yaml() {
@@ -102,7 +106,7 @@ generate_steps_yaml() {
   for step in "${STEPS[@]}"; do
     echo "${indent}$step:"
     echo "${indent}  status: pending"
-    echo "${indent}  name: \"${STEP_NAMES[$step]}\""
+    echo "${indent}  name: \"$(get_step_name "$step")\""
   done
 }
 
@@ -241,7 +245,7 @@ cmd_list() {
       # Get step name
       local step_name=""
       if [ -n "$current_step" ]; then
-        step_name="${STEP_NAMES[$current_step]}"
+        step_name="$(get_step_name "$current_step")"
       fi
 
       case "$status" in
@@ -287,7 +291,7 @@ cmd_complete() {
     sed -i "/$STEP_ID:/,/name:/{s/status: pending/status: completed/;s/status: in_progress/status: completed/;}" "$TASK_DIR/status.yaml"
   fi
 
-  success "Step $STEP_ID (${STEP_NAMES[$STEP_ID]}) completed"
+  success "Step $STEP_ID ($(get_step_name "$STEP_ID")) completed"
 
   # Check if this is the last step or --finish flag
   if [ "$FLAG" = "--finish" ] || [ "$STEP_ID" = "step-5" ]; then
@@ -318,7 +322,7 @@ cmd_complete() {
       fi
 
       echo ""
-      info "Next: $next_step (${STEP_NAMES[$next_step]})"
+      info "Next: $next_step ($(get_step_name "$next_step"))"
       echo ""
       echo "  1. Load rules: Read assets/rules/AGENTS.md"
       echo "  2. Read step guide: references/$next_step.md"
