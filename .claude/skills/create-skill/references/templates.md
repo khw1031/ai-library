@@ -187,6 +187,61 @@ skill-name/
     └── template.json
 ```
 
+### 확장 구조 예시: scripts/ 활용
+
+```yaml
+---
+name: code-metrics
+description: >
+  코드베이스의 복잡도와 품질 메트릭을 측정합니다.
+  코드 분석, 복잡도, 메트릭, 품질 측정 요청 시 사용.
+context: fork
+agent: general-purpose
+---
+
+# 코드 메트릭 분석
+
+## 사용 방법
+
+1. 분석 대상 디렉토리 확인
+2. 메트릭 스크립트 실행: `scripts/analyze.py <경로>`
+3. 결과 해석 및 요약
+
+## 참고
+
+- [메트릭 상세 설명](references/metrics.md)
+```
+
+```python
+# scripts/analyze.py - 자체 완결적 스크립트
+"""코드 복잡도 분석 스크립트."""
+import sys
+import os
+
+def analyze(path):
+    """지정 경로의 코드 메트릭을 분석한다."""
+    if not os.path.exists(path):
+        print(f"Error: Path not found: {path}", file=sys.stderr)
+        sys.exit(1)
+
+    file_count = 0
+    total_lines = 0
+    for root, _, files in os.walk(path):
+        for f in files:
+            if f.endswith(('.py', '.js', '.ts')):
+                file_count += 1
+                with open(os.path.join(root, f)) as fh:
+                    total_lines += sum(1 for _ in fh)
+
+    print(f"Files: {file_count}")
+    print(f"Total lines: {total_lines}")
+    print(f"Avg lines/file: {total_lines // max(file_count, 1)}")
+
+if __name__ == "__main__":
+    target = sys.argv[1] if len(sys.argv) > 1 else "."
+    analyze(target)
+```
+
 ---
 
 ## 빠른 시작 템플릿
