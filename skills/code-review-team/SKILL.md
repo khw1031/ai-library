@@ -68,13 +68,47 @@ Phase 2: 범위 확정 → TeamCreate → 병렬 개선 → 완료 보고
 
 ### Step 3. 변경 사항 분석
 
+다음 우선순위에 따라 diff 범위를 결정합니다.
+
+#### 3-1. Diff 범위 결정
+
+| 우선순위 | 조건 | diff 범위 |
+|----------|------|-----------|
+| 1 | 사용자가 커밋/태그 지정 | `git diff <ref>..HEAD` |
+| 2 | 피처 브랜치 (비-기본 브랜치) | `git diff $(git merge-base <base> HEAD)..HEAD` |
+| 3 | Fallback | 사용자에게 질문 |
+
+**베이스 브랜치 자동 탐지** (Priority 2에서 사용):
+
 ```bash
-git branch --show-current          # TICKET_ID 추출
-git diff HEAD~1 --name-only        # 변경 파일 목록
-git diff HEAD~1                    # 전체 diff
+# 존재하는 첫 번째 브랜치를 베이스로 사용
+for base in origin/dev origin/develop origin/main; do
+  git rev-parse --verify "$base" &>/dev/null && break
+done
 ```
 
-**TICKET_ID**: 브랜치명에서 패턴 추출 (`feature/ABC-123-desc` → `ABC-123`). 실패 시 사용자에게 질문.
+**기본 브랜치 판별**: `dev`, `develop`, `main`, `master` 중 하나면 기본 브랜치로 간주.
+
+#### 3-2. TICKET_ID 추출
+
+```bash
+git branch --show-current
+```
+
+브랜치명에서 TICKET_ID 패턴 추출:
+- `feature/ABC-123-desc` → `ABC-123`
+- `fix/PROJ-456` → `PROJ-456`
+- `ABC-123-some-desc` → `ABC-123`
+- 패턴: `[A-Z]+-[0-9]+` (첫 매칭)
+- 실패 시 → 사용자에게 질문
+
+#### 3-3. 변경 사항 수집
+
+```bash
+git diff {범위} --name-only    # 변경 파일 목록
+git diff {범위}                 # 전체 diff
+git log {범위} --oneline        # 커밋 히스토리 (컨텍스트 파악용)
+```
 
 ### Step 4. 리뷰 수행
 
