@@ -39,6 +39,11 @@
   <trigger>Skills, Agents, Prompts 작성 시 참조. SKILL.md, AGENT.md 작성, 프롬프트 설계, 컨텍스트 최적화 시 활성화.</trigger>
 </skill>
 
+<skill name="prompt-improver" ref=".claude/skills/prompt-improver">
+  <description>프롬프트를 실증 기반 기법으로 분석하고 개선합니다. Few-shot, CoT, XML 구조화, Context Engineering 등 검증된 기법을 적용하여 프롬프트 품질을 높입니다.</description>
+  <trigger>프롬프트 개선, prompt 리뷰, 프롬프트 최적화, 프롬프팅 개선 요청 시 사용.</trigger>
+</skill>
+
 <skill name="skills-ref" ref=".claude/skills/skills-ref">
   <description>스킬 디렉토리를 스캔하여 CLAUDE.md에 Available Skills 섹션을 XML 구조로 생성합니다.</description>
   <trigger>스킬 등록, 스킬 목록 생성, CLAUDE.md 스킬 섹션, skills ref, 스킬 인덱스, available skills 작성 요청 시 활성화.</trigger>
