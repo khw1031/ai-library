@@ -47,3 +47,15 @@
 </available-skills>
 
 > **참고**: `skills-ref`는 `.claude/skills/`만 스캔 대상으로 합니다. 프로젝트 루트의 `skills/`, `agents/` 디렉토리는 도메인 지식 자원으로, `skills-ref` 대상이 아닙니다.
+
+## 생성 경로 규칙
+
+이 프로젝트는 **라이브러리 공유용** 리포지토리입니다. Skill, Agent, Rule 생성 시 `.claude/` 하위가 아닌 프로젝트 루트의 각 디렉토리에 생성합니다.
+
+| 유형 | 생성 경로 | 용도 |
+|------|----------|------|
+| Skill | `skills/{name}/` | 공유용 스킬 |
+| Agent | `agents/{name}/` | 공유용 에이전트 |
+| Rule | `rules/{name}/` | 공유용 규칙 |
+
+> `.claude/skills/`, `.claude/agents/`는 이 프로젝트 자체의 Claude Code 워크플로우 전용입니다. 공유 자원을 여기에 생성하지 마세요.
