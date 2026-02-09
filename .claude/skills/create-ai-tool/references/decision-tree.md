@@ -59,7 +59,7 @@
               └─ NO → 기본값 유지
 ```
 
-**Skill 생성하기** → `/create-skill` 또는 [create-skill](../../create-skill/SKILL.md)
+**Skill 생성하기** → `/create-skill` 또는 [create-skill](skills/create-skill/SKILL.md)
 
 ---
 
@@ -96,7 +96,7 @@
               └─ NO → 기본 description만 작성
 ```
 
-**Agent 생성하기** → `/create-agent` 또는 [create-agent](../../create-agent/SKILL.md)
+**Agent 생성하기** → `/create-agent` 또는 [create-agent](skills/create-agent/SKILL.md)
 
 ---
 

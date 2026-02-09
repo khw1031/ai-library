@@ -15,8 +15,8 @@
 </skill>
 
 <skill name="create-ai-tool" ref=".claude/skills/create-ai-tool">
-  <description>AI 도구 유형(Skill/Agent)을 결정하고 생성을 안내합니다.</description>
-  <trigger>도구 유형 선택, 스킬 vs 에이전트, 어떤 걸 만들어야 할지 요청 시 활성화.</trigger>
+  <description>사용자 요구사항을 분석하여 Skill 또는 Agent 중 적절한 유형을 결정하고 생성을 위임합니다.</description>
+  <trigger>도구 만들기, 스킬 vs 에이전트, 어떤 걸 만들어야 할지, 도구 유형 선택 요청 시 활성화.</trigger>
 </skill>
 
 <skill name="create-skill" ref=".claude/skills/create-skill">

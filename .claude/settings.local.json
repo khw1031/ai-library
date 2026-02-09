@@ -7,7 +7,8 @@
       "Bash(wc:*)",
       "Bash(gh api:*)",
       "Bash(chmod:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(uvx:*)"
     ]
   }
 }

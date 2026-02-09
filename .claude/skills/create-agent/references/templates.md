@@ -155,6 +155,35 @@ hooks:
 
 ---
 
+## 영속 메모리 Agent (학습 축적)
+
+```yaml
+---
+name: code-reviewer
+description: >
+  코드 리뷰 전문가. 품질, 보안, 유지보수성 검토.
+  코드 작성/수정 후 사전에 사용.
+  Use proactively after code changes.
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit
+memory: user
+---
+
+당신은 코드 리뷰 전문가입니다.
+
+리뷰 시작 전 메모리를 참조하여 이전에 발견한 패턴과 이슈를 확인하세요.
+작업 완료 후 새로 학습한 코드베이스 패턴, 아키텍처 결정사항을 메모리에 기록하세요.
+
+## 호출 시 수행 단계
+
+1. 메모리에서 기존 리뷰 패턴 확인
+2. git diff로 최근 변경 확인
+3. 리뷰 수행
+4. 새로운 패턴/인사이트를 메모리에 기록
+```
+
+---
+
 ## 코드 리뷰 Agent (표준)
 
 ```yaml
@@ -201,30 +230,19 @@ model: inherit
 
 ## 디렉토리 구조 템플릿
 
-### 단순 구조 (단일 파일)
+### 단일 파일
 
 ```
-agents/
+.claude/agents/
 └── code-reviewer.md
 ```
 
-### 표준 구조 (권장)
+### 폴더 구조 (references 필요 시)
 
 ```
-agents/
+.claude/agents/
 └── code-reviewer/
-    ├── AGENTS.md      # 진입점 (개요)
-    └── AGENT.md       # 시스템 프롬프트
-```
-
-### 확장 구조 (복잡한 에이전트)
-
-```
-agents/
-└── code-reviewer/
-    ├── AGENTS.md          # 진입점 (개요)
     ├── AGENT.md           # 시스템 프롬프트
-    ├── CLAUDE.md          # AGENTS.md 참조 (선택)
     └── references/        # 상세 문서
         └── review-criteria.md
 ```

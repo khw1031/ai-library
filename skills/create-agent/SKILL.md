@@ -13,20 +13,21 @@ Claude Code Agent를 생성하는 가이드입니다.
 
 | 필드 | 설명 | 제약 |
 |------|------|------|
-| `name` | 에이전트 식별자 | 소문자/하이픈만 |
+| `name` | 에이전트 식별자 | 소문자/하이픈만, 하이픈 시작·연속 불가 |
 | `description` | 역할 + 위임 조건 + "Use proactively" | Claude 위임 판단 기준 |
-| `tools` | 허용 도구 목록 | 필요한 도구만 명시 |
 
 ## description 작성 패턴
 
+Claude는 description을 읽고 위임 여부를 판단한다. **What(무엇을 하는지)** + **When(언제 사용하는지)** 모두 포함해야 한다.
+
 ```yaml
 description: >
-  [역할/전문 영역]
-  [언제 위임할지 조건]
+  [역할/전문 영역 - What]
+  [언제 위임할지 조건 - When]
   Use proactively when/after [트리거 조건].
 ```
 
-**예시:**
+**좋은 예:**
 ```yaml
 description: >
   코드 리뷰 전문가. 품질, 보안, 유지보수성 검토.
@@ -34,12 +35,25 @@ description: >
   Use proactively after code changes.
 ```
 
+**나쁜 예:**
+```yaml
+description: 코드를 검토합니다.  # What만 있고 When 없음 → 위임 시점 판단 불가
+```
+
 ## 생성 단계
 
-### 1단계: 디렉토리 생성
+### 1단계: 파일 생성
+
+**단일 파일** (간단한 에이전트):
 
 ```bash
-mkdir -p agents/{name}/references
+touch .claude/agents/{name}.md
+```
+
+**폴더 구조** (references가 필요한 경우):
+
+```bash
+mkdir -p .claude/agents/{name}/references
 ```
 
 ### 2단계: AGENT.md 작성
@@ -67,32 +81,19 @@ tools: Read, Grep, Glob, Bash
 [결과물 형식 정의]
 ```
 
-### 3단계: AGENTS.md 개요 작성 (선택)
-
-```markdown
-# Agent Name
-
-> 에이전트 한 줄 설명
-
-## 용도
-
-이 에이전트가 하는 일 설명.
-
-## 상세
-
-- [AGENT.md](AGENT.md) - 시스템 프롬프트
-- [참조 문서](references/detail.md)
-```
-
 ## 선택 필드
 
 | 필드 | 용도 | 예시 |
 |------|------|------|
+| `tools` | 허용 도구 (생략 시 전체 상속) | `Read, Grep, Glob, Bash` |
 | `disallowedTools` | 거부 도구 | `Write, Edit` |
 | `model` | 모델 선택 | `haiku`, `sonnet`, `opus`, `inherit` |
 | `permissionMode` | 권한 모드 | `default`, `acceptEdits`, `dontAsk` |
-| `skills` | 스킬 주입 | `[api-conventions, error-handling]` |
+| `maxTurns` | 최대 에이전틱 턴 수 | `10` |
+| `skills` | 시작 시 주입할 스킬 | `[api-conventions, error-handling]` |
 | `hooks` | 라이프사이클 훅 | `{PreToolUse: [...]}` |
+| `mcpServers` | 사용할 MCP 서버 | `{server-name: {command: "..."}}` |
+| `memory` | 영속 메모리 스코프 | `user`, `project`, `local` |
 
 ## 도구 제한 패턴
 
@@ -101,6 +102,8 @@ tools: Read, Grep, Glob, Bash
 | 읽기 전용 | `Read, Grep, Glob, Bash` | `Write, Edit` |
 | 수정 가능 | `Read, Edit, Write, Grep, Glob, Bash` | - |
 | 최소 권한 | `Read, Grep, Glob` | - |
+| 스폰 제어 | `Task(worker, researcher), Read, Bash` | - |
+| 스폰 불가 | `Read, Bash` (Task 생략) | - |
 
 ## 모델 선택 가이드
 

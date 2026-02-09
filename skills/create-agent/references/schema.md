@@ -11,6 +11,7 @@
 | 항목 | 규칙 |
 |------|------|
 | 형식 | 소문자, 하이픈만 |
+| 제한 | 하이픈으로 시작 불가, 연속 하이픈 불가 |
 | 용도 | 고유 식별자 |
 
 ```yaml
@@ -22,6 +23,8 @@ name: data-analyst
 # 무효
 name: CodeReviewer      # 대문자 불가
 name: code_reviewer     # 언더스코어 불가
+name: -code-reviewer    # 하이픈 시작 불가
+name: code--reviewer    # 연속 하이픈 불가
 ```
 
 ### description
@@ -44,9 +47,13 @@ description: >
 description: 코드를 검토합니다.  # 모호함, 위임 조건 없음
 ```
 
+---
+
+## 선택 필드
+
 ### tools
 
-허용할 도구 목록:
+허용할 도구 목록. 생략 시 전체 상속.
 
 ```yaml
 # 읽기 전용
@@ -57,11 +64,10 @@ tools: Read, Edit, Write, Grep, Glob, Bash
 
 # 최소 권한
 tools: Read, Grep, Glob
+
+# 특정 subagent만 스폰 허용
+tools: Task(worker, researcher), Read, Bash
 ```
-
----
-
-## 선택 필드
 
 ### disallowedTools
 
@@ -115,9 +121,48 @@ skills:
   - error-handling-patterns
 ```
 
+### maxTurns
+
+최대 에이전틱 턴 수:
+
+```yaml
+maxTurns: 10
+```
+
+### mcpServers
+
+사용할 MCP 서버:
+
+```yaml
+mcpServers:
+  server-name:
+    command: "npx"
+    args: ["-y", "@example/mcp-server"]
+```
+
+### memory
+
+영속 메모리. 활성화 시 `MEMORY.md` 자동 로드 (200줄까지), Read/Write/Edit 도구 자동 활성화.
+
+| Scope | 경로 | 적합한 경우 |
+|-------|------|------------|
+| `user` | `~/.claude/agent-memory/<name>/` | 모든 프로젝트 공통 학습 |
+| `project` | `.claude/agent-memory/<name>/` | 프로젝트 고유, VCS 공유 가능 |
+| `local` | `.claude/agent-memory-local/<name>/` | 프로젝트 고유, VCS 제외 |
+
+```yaml
+memory: user
+```
+
 ### hooks
 
-에이전트 라이프사이클 훅:
+에이전트 라이프사이클 훅. 핸들러 타입은 3가지:
+
+| 타입 | 설명 |
+|------|------|
+| `command` | 셸 명령 실행, stdin으로 JSON 수신 |
+| `prompt` | LLM에 단일 턴 평가 요청 |
+| `agent` | 서브에이전트 스폰, Read/Grep/Glob 사용 가능 |
 
 ```yaml
 hooks:
@@ -202,12 +247,15 @@ hooks:
 |------|------|--------|------|
 | `name` | O | - | 에이전트 식별자 |
 | `description` | O | - | 역할 + 위임 조건 + proactive |
-| `tools` | O | 전체 상속 | 허용 도구 |
+| `tools` | X | 전체 상속 | 허용 도구 |
 | `disallowedTools` | X | - | 거부 도구 |
 | `model` | X | `inherit` | 모델 선택 |
 | `permissionMode` | X | `default` | 권한 모드 |
+| `maxTurns` | X | - | 최대 에이전틱 턴 수 |
 | `skills` | X | - | 스킬 주입 |
 | `hooks` | X | - | 라이프사이클 훅 |
+| `mcpServers` | X | - | MCP 서버 지정 |
+| `memory` | X | - | 영속 메모리 스코프 |
 
 ---
 
