@@ -45,3 +45,5 @@
 </skill>
 
 </available-skills>
+
+> **참고**: `skills-ref`는 `.claude/skills/`만 스캔 대상으로 합니다. 프로젝트 루트의 `skills/`, `agents/` 디렉토리는 도메인 지식 자원으로, `skills-ref` 대상이 아닙니다.
