@@ -143,6 +143,27 @@ graph TD
 
 ---
 
+## Team 실행 계획
+
+> Step 4에서 Coordinator가 Agent Team 스폰 시 이 섹션을 참조합니다.
+
+### Worker 구성
+
+- Worker 수: {N}명 (최대 병렬도 기반)
+- Worker 이름: impl-worker-1 ~ impl-worker-{N}
+
+### TaskCreate 매핑
+
+| todos 파일 | Team Task subject | blockedBy |
+|------------|-------------------|-----------|
+| 01-TASK.md | impl: 타입 정의 | - |
+| 02-TASK.md | impl: API 클라이언트 | Task #1 |
+| 03-TASK.md | impl: 비즈니스 로직 | Task #1, #2 |
+| 04-TASK.md | impl: UI 컴포넌트 | Task #3 |
+| 05-TASK.md | impl: 통합 테스트 | Task #4 |
+
+---
+
 ## 진행 상황
 
 | 태스크  | 파일       | 관련 TS        | 상태    | 테스트 결과 | 완료일 |

@@ -133,35 +133,91 @@ git diff HEAD~1                    # 전체 diff
 
 사용자가 범위를 지정하면 Agent Team을 스폰합니다.
 
-### 1. 범위 확정 및 작업 그룹핑
+### Step 1. 범위 확정 및 작업 그룹핑
 
 대상 이슈를 **파일 단위**로 그룹핑:
 - 같은 파일 / 의존 관계 파일 → 하나의 Task
 - 독립 파일 → 별도 Task
 - 최대 Worker 5명
 
-### 2. Team SPAWN
+### Step 2. Team SPAWN
 
-[팀 스폰 패턴](references/team-spawn.md) 참조.
+[팀 스폰 상세 가이드](references/team-spawn.md) 참조.
 
-```
-TeamCreate: "review-{TICKET_ID}"
-  ├─ TaskCreate: 그룹별 Task
-  ├─ Task (general-purpose) × N:
-  │   Worker에게 전달하는 정보:
-  │   - 프로젝트 컨텍스트 요약 (규칙, 컨벤션)
-  │   - 담당 파일 및 이슈 목록
-  │   - 개선 방향 (리뷰 문서에서 추출)
-  └─ 완료 대기 → 결과 수집
-```
+다음 절차를 **순서대로** 실행합니다.
 
-**Worker 프롬프트 핵심:**
-- 프로젝트 규칙/컨벤션을 **먼저** 전달
-- 이슈별 개선 방향에 따라 수정
-- 기존 코드 스타일 유지
-- 담당 파일만 수정
+#### 2-1. 팀 생성
 
-### 3. 완료 보고
+`TeamCreate` 도구를 호출합니다.
+
+| 파라미터 | 값 |
+|----------|-----|
+| `team_name` | `"review-{TICKET_ID}"` |
+| `description` | `"{TICKET_ID} 코드 리뷰 이슈 개선"` |
+
+#### 2-2. 태스크 생성
+
+이슈 그룹마다 `TaskCreate` 도구를 호출합니다. 모든 태스크를 **동시에** 생성합니다.
+
+| 파라미터 | 값 |
+|----------|-----|
+| `subject` | `"개선: {파일명} ({이슈 수}건)"` |
+| `description` | 프로젝트 컨텍스트 + 담당 파일 + 수정할 이슈 목록 |
+| `activeForm` | `"{파일명} 개선 중"` |
+
+#### 2-3. Worker 스폰
+
+이슈 그룹 수만큼 `Task` 도구를 호출하여 Worker를 스폰합니다. **모든 Worker를 동시에** 스폰합니다.
+
+| 파라미터 | 값 |
+|----------|-----|
+| `subagent_type` | `"general-purpose"` |
+| `team_name` | `"review-{TICKET_ID}"` |
+| `name` | `"refactor-worker-{N}"` (1부터 순번) |
+| `description` | `"코드 개선 Worker {N}"` |
+| `mode` | `"bypassPermissions"` |
+| `prompt` | Worker 프롬프트 (아래 참조) |
+
+**Worker 프롬프트에 반드시 포함할 내용:**
+- 프로젝트 규칙/컨벤션 (CLAUDE.md에서 추출한 핵심 규칙)
+- 담당 파일 및 이슈 목록 (리뷰 문서에서 해당 그룹의 이슈 전체)
+- 이슈별 개선 방향
+- **작업 절차 지시** (TaskList → TaskUpdate in_progress → 파일 수정 → SendMessage로 리더에게 보고 → TaskUpdate completed)
+- **담당 파일만 수정하라는 규칙**
+
+Worker 프롬프트 상세 템플릿은 [팀 스폰 상세 가이드](references/team-spawn.md)를 참조합니다.
+
+#### 2-4. 태스크 할당
+
+Worker가 스폰되면 `TaskUpdate` 도구로 각 Worker에게 Task를 할당합니다.
+
+| 파라미터 | 값 |
+|----------|-----|
+| `taskId` | 해당 태스크 ID |
+| `owner` | `"refactor-worker-{N}"` (Worker name과 동일) |
+
+#### 2-5. 완료 대기
+
+Worker들이 작업을 완료하면 `SendMessage`로 결과를 보고합니다. 자동으로 수신됩니다.
+모든 Worker의 보고가 도착할 때까지 대기합니다.
+
+### Step 3. 정리 및 보고
+
+#### 3-1. Worker 종료
+
+모든 Worker에게 `SendMessage` 도구로 종료를 요청합니다.
+
+| 파라미터 | 값 |
+|----------|-----|
+| `type` | `"shutdown_request"` |
+| `recipient` | `"refactor-worker-{N}"` |
+| `content` | `"작업 완료. 종료합니다."` |
+
+#### 3-2. 팀 삭제
+
+모든 Worker가 종료된 후 `TeamDelete` 도구를 호출합니다.
+
+#### 3-3. 완료 보고
 
 ```
 ✅ 개선 완료
@@ -174,12 +230,10 @@ TeamCreate: "review-{TICKET_ID}"
 팀 정리 완료. 커밋하시려면 말씀해주세요.
 ```
 
-TeamDelete로 팀 정리.
-
 ---
 
 ## 상세 가이드
 
 - [전문가 패널 구성](references/expert-panel.md)
 - [리뷰 문서 템플릿](references/review-template.md)
-- [팀 스폰 패턴](references/team-spawn.md)
+- [팀 스폰 상세 가이드](references/team-spawn.md)

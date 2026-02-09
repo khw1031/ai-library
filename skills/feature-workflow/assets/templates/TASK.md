@@ -131,6 +131,23 @@ function [functionName]([params]): [ReturnType] {
 - [ ] Git 커밋 완료
 - [ ] TASK_MASTER.md 진행 상황 업데이트
 
+## Worker 컨텍스트
+
+> 이 섹션은 Step 4에서 Team Worker에게 전달되는 핵심 컨텍스트입니다.
+> Coordinator가 TaskCreate 시 이 내용을 description에 인라인합니다.
+
+### 프로젝트 규칙
+
+[TASK_MASTER의 INSTRUCTION에서 발췌 — 코드 패턴 가이드, 금지 사항, 완료 조건]
+
+### 이 태스크의 핵심
+
+- **파일**: {생성/수정할 파일 경로}
+- **의존**: {선행 태스크 번호} (없으면 "None")
+- **TDD**: {관련 TS-xxx 목록}
+
+---
+
 ## 통합 포인트
 
 ### 이 태스크의 출력
