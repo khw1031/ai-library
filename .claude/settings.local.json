@@ -5,7 +5,9 @@
       "mcp__acp__Write",
       "mcp__acp__Edit",
       "Bash(wc:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(chmod:*)",
+      "Bash(bash:*)"
     ]
   }
 }
