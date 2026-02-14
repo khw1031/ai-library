@@ -42,35 +42,54 @@ asset-name/
 
 ## Components
 
-### Skills
+### Skills (26)
 
 Prompt-based tools that provide specialized capabilities:
 
 | Skill | Description |
 |-------|-------------|
-| `create-ai-tool` | Generate Rules, Skills, and Agents using Progressive Disclosure |
-| `workflow-framework` | Generic framework for creating custom workflow skills |
-| `feature-workflow` | 5-step workflow for feature implementation |
-| `qa-workflow` | Test case generation and E2E testing from specifications |
-| `plan-workflow` | Specification analysis and PRD extraction |
+| `add-rules` | 프로젝트에 규칙을 Skill 기반으로 추가하고 기존 규칙을 Skill로 변환 |
+| `changelog` | CHANGELOG.md에 변경 사항과 담당자를 정리하고 package.json 버전 업데이트 |
+| `code-review-team` | 전문가 관점 코드 리뷰 + Agent Team 병렬 개선 작업 |
+| `create-agent` | Claude Code Agent 생성 |
+| `create-ai-tool` | Skill vs Agent 유형 결정 및 생성 위임 |
+| `create-skill` | Claude Code Skill 생성 |
+| `document-consolidator` | 여러 문서를 구조화된 단일 문서로 통합 |
+| `feature-workflow` | 5단계 기능 구현 워크플로우 (Agent Team 병렬 지원) |
+| `financial-*` | 재무 관련 스킬 7종 (예산, 부채, 보험, 투자, 지식관리, 생애설계, 세금) |
+| `first-principles` | 1원칙(First Principles Thinking) 기반 문제 분석 |
+| `git-commit` | Git 변경 사항 분석 및 커밋 메시지 자동 생성 |
+| `kind-senior-developer` | 친절한 시니어 개발자처럼 변경 사항 분석/설명 |
+| `learning-log-generator` | Git 커밋 히스토리 기반 일자별 학습 로그 생성 |
+| `musk-algorithm` | Elon Musk 5단계 문제 해결 알고리즘 적용 |
+| `note-search` | notes/ 디렉토리 학습 노트 검색 |
+| `note-writer` | Obsidian 호환 학습 노트 작성 |
+| `progressive-disclosure` | LLM 컨텍스트 윈도우 3단계 정보 로드 원칙 |
+| `prompt-improver` | 실증 기반 기법으로 프롬프트 분석/개선 |
+| `skills-ref` | CLAUDE.md에 Available Skills 섹션 XML 생성 |
+| `vibe-mvp-advisor` | AI 아이디어 구현 가능성 및 수익화 MVP 제안 |
 
-### Agents
+> Full list: [skills/README.md](skills/README.md)
+
+### Agents (2)
 
 Subagents with isolated context for specific tasks:
 
 | Agent | Description |
 |-------|-------------|
-| `task-master` | Orchestrator that coordinates parallel subtask execution |
-| `task-executor` | Developer agent that executes individual tasks |
-| `code-reviewer` | Senior code reviewer with CRITICAL issue detection |
+| `data-crawler` | 웹 데이터 크롤링 및 수집 전문가 (sonnet) |
+| `family-financial-advisor` | 가족 재무 상담 전문가 |
 
-### Rules
+> Full list: [agents/README.md](agents/README.md)
 
-Guidelines that apply across the codebase:
+### Rules (2)
+
+Guidelines that apply across conversations:
 
 | Rule | Description |
 |------|-------------|
-| `progressive-disclosure` | Core principle with detailed reference guides |
+| `CLAUDE.md` | 도메인 중립 Global Rule (Think Before Acting, Simplicity First, Scoped Response, Goal-Driven Execution) |
+| `CODING.md` | 코딩 전용 Rule (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution) |
 
 ## Installation
 
@@ -138,22 +157,36 @@ paths:
 
 ```
 ai-library/
-├── .claude/                    # Active Claude Code assets
-│   ├── skills/                 # Active skills
-│   ├── agents/                 # Active agents
-│   └── rules/                  # Active rules
-├── skills/                     # Deployment version skills
+├── .claude/                    # This project's Claude Code workflow
+│   ├── skills/                 # Internal skills
+│   └── agents/                 # Internal agents
+├── skills/                     # Shared skills (26)
+│   ├── add-rules/
+│   ├── changelog/
+│   ├── code-review-team/
+│   ├── create-agent/
 │   ├── create-ai-tool/
+│   ├── create-skill/
+│   ├── document-consolidator/
 │   ├── feature-workflow/
-│   ├── plan-workflow/
-│   └── qa-workflow/
-├── agents/                     # Deployment version agents
-│   ├── code-reviewer/
-│   ├── task-master/
-│   └── task-executor/
-├── rules/                      # Deployment version rules
-│   └── progressive-disclosure/
-└── docs/                       # Documentation
+│   ├── financial-*/            # Financial skills (7)
+│   ├── first-principles/
+│   ├── git-commit/
+│   ├── kind-senior-developer/
+│   ├── learning-log-generator/
+│   ├── musk-algorithm/
+│   ├── note-search/
+│   ├── note-writer/
+│   ├── progressive-disclosure/
+│   ├── prompt-improver/
+│   ├── skills-ref/
+│   └── vibe-mvp-advisor/
+├── agents/                     # Shared agents (2)
+│   ├── data-crawler/
+│   └── family-financial-advisor/
+└── rules/                      # Shared rules (2)
+    ├── CLAUDE.md
+    └── CODING.md
 ```
 
 ## Writing Your Own Assets
