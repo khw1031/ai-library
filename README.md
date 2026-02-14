@@ -1,53 +1,50 @@
 # AI Library
 
-> A collection of reusable prompt assets (Skills, Rules, Agents) for Claude Code and LLM-based tools, built on the Progressive Disclosure principle.
+> Claude Code 및 LLM 기반 도구를 위한 재사용 가능한 프롬프트 자산(Skills, Rules, Agents) 모음. Progressive Disclosure 원칙으로 설계되었습니다.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[한국어](README.ko.md) | [日本語](README.ja.md) | [中文](README.zh.md)
+## 개요
 
-## Overview
+AI Library는 **컨텍스트 효율성**에 중점을 둔 AI/LLM 워크플로우 관리 프레임워크입니다. 프롬프트 자산을 3단계 로딩 모델로 구조화하여, 제한된 컨텍스트 윈도우를 최대한 활용하면서 완전한 기능을 유지합니다.
 
-AI Library is a framework for managing AI/LLM workflows with a strong emphasis on **context efficiency**. By organizing prompt assets into a 3-stage loading model, it maximizes the use of limited context windows while maintaining full functionality.
+### 주요 특징
 
-### Key Features
+- **Progressive Disclosure**: 필요한 시점에 단계적으로 정보 로드
+- **Context Isolation**: 각 워크플로우 단계를 별도 대화 컨텍스트에서 실행
+- **Human in the Loop**: 다음 단계 진행 전 사용자 확인
+- **Document as Interface**: 마크다운 파일을 통한 단계 간 소통
+- **Git as History**: 각 단계 완료 시 커밋 체크포인트 생성
 
-- **Progressive Disclosure**: Load information only when needed, in stages
-- **Context Isolation**: Each workflow step runs in a separate conversation context
-- **Human in the Loop**: User confirmation before proceeding to next steps
-- **Document as Interface**: Step-to-step communication via markdown files
-- **Git as History**: Each step completion creates a commit checkpoint
+## 아키텍처
 
-## Architecture
+### Progressive Disclosure (3단계 로딩)
 
-### Progressive Disclosure (3-Stage Loading)
+LLM 컨텍스트 윈도우는 제한된 자원입니다. 모든 정보를 한 번에 로드하면 초점이 분산되고 성능이 저하됩니다. 이 라이브러리는 3단계 모델을 사용합니다:
 
-LLM context windows are limited resources. Loading all information at once dilutes focus and degrades performance. This library uses a 3-stage model:
+| 단계 | 로드 시점 | 토큰 | 내용 |
+|------|----------|------|------|
+| 1단계 | 항상 | ~100 | 이름, 설명, 트리거 키워드 |
+| 2단계 | 활성화 시 | <5000 | 핵심 규칙, 필수 지침 |
+| 3단계 | 필요 시 | 무제한 | 예시, 상세 문서, 스크립트 |
 
-| Stage | Load Time | Tokens | Content |
-|-------|-----------|--------|---------|
-| Stage 1 | Always | ~100 | name, description, trigger keywords |
-| Stage 2 | On Activation | <5000 | Core rules, essential instructions |
-| Stage 3 | On Demand | Unlimited | Examples, detailed docs, scripts |
-
-### Standard Directory Structure
+### 표준 디렉토리 구조
 
 ```
 asset-name/
-├── AGENTS.md          # Entry point - overview (auto-recognized by Claude)
-├── [TYPE].md          # Stage 2 - core instructions
-└── references/        # Stage 3 - detailed documentation
+├── SKILL.md / AGENT.md    # 진입점 - 2단계 핵심 지침
+└── references/            # 3단계 - 상세 문서
     └── *.md
 ```
 
-## Components
+## 구성 요소
 
-### Skills (26)
+### Skills (26개)
 
-Prompt-based tools that provide specialized capabilities:
+전문 기능을 제공하는 프롬프트 기반 도구:
 
-| Skill | Description |
-|-------|-------------|
+| Skill | 설명 |
+|-------|------|
 | `add-rules` | 프로젝트에 규칙을 Skill 기반으로 추가하고 기존 규칙을 Skill로 변환 |
 | `changelog` | CHANGELOG.md에 변경 사항과 담당자를 정리하고 package.json 버전 업데이트 |
 | `code-review-team` | 전문가 관점 코드 리뷰 + Agent Team 병렬 개선 작업 |
@@ -69,98 +66,99 @@ Prompt-based tools that provide specialized capabilities:
 | `skills-ref` | CLAUDE.md에 Available Skills 섹션 XML 생성 |
 | `vibe-mvp-advisor` | AI 아이디어 구현 가능성 및 수익화 MVP 제안 |
 
-> Full list: [skills/README.md](skills/README.md)
+> 전체 목록: [skills/README.md](skills/README.md)
 
-### Agents (2)
+### Agents (2개)
 
-Subagents with isolated context for specific tasks:
+특정 작업을 위한 격리된 컨텍스트의 서브에이전트:
 
-| Agent | Description |
-|-------|-------------|
+| Agent | 설명 |
+|-------|------|
 | `data-crawler` | 웹 데이터 크롤링 및 수집 전문가 (sonnet) |
 | `family-financial-advisor` | 가족 재무 상담 전문가 |
 
-> Full list: [agents/README.md](agents/README.md)
+> 전체 목록: [agents/README.md](agents/README.md)
 
-### Rules (2)
+### Rules (2개)
 
-Guidelines that apply across conversations:
+대화 전반에 적용되는 가이드라인:
 
-| Rule | Description |
-|------|-------------|
+| Rule | 설명 |
+|------|------|
 | `CLAUDE.md` | 도메인 중립 Global Rule (Think Before Acting, Simplicity First, Scoped Response, Goal-Driven Execution) |
 | `CODING.md` | 코딩 전용 Rule (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution) |
 
-## Installation
+## 설치
 
-### For Claude Code Projects
+### Claude Code 프로젝트에서 사용
 
-Copy the desired assets to your project's `.claude/` directory:
+원하는 자산을 프로젝트의 `.claude/` 디렉토리에 복사합니다:
 
 ```bash
-# Copy a skill
+# 스킬 복사
 cp -r skills/feature-workflow .claude/skills/
 
-# Copy an agent
-cp -r agents/code-reviewer .claude/agents/
+# 에이전트 복사
+cp -r agents/data-crawler .claude/agents/
 
-# Copy a rule
-cp -r rules/progressive-disclosure .claude/rules/
+# 규칙 복사
+cp -r rules/CLAUDE.md .claude/rules/
 ```
 
-### Directory Structure
+### 설치 경로
 
 ```
 your-project/
 ├── .claude/
-│   ├── skills/          # Your skills
-│   ├── agents/          # Your agents
-│   └── rules/           # Your rules
+│   ├── skills/          # 스킬
+│   ├── agents/          # 에이전트
+│   └── rules/           # 규칙
 └── ...
 ```
 
-## Usage
+## 사용법
 
-### Using Skills
+### 스킬 사용
 
-Skills can be invoked via slash commands:
-
-```
-/create-ai-tool      # Create new AI tools
-/feature-workflow    # Start feature development workflow
-```
-
-### Using Agents
-
-Agents are automatically delegated by Claude based on task context:
+슬래시 명령어로 호출합니다:
 
 ```
-"Review the code changes" → code-reviewer agent
-"Execute these tasks in parallel" → task-master agent
+/create-ai-tool      # AI 도구 생성
+/feature-workflow    # 기능 개발 워크플로우 시작
+/git-commit          # 커밋 메시지 자동 생성
 ```
 
-### Using Rules
+### 에이전트 사용
 
-Rules are automatically applied based on file patterns or explicit triggers:
+에이전트는 작업 컨텍스트에 따라 Claude가 자동으로 위임합니다:
+
+```
+"데이터를 크롤링해줘" → data-crawler 에이전트
+"재무 상담 해줘" → family-financial-advisor 에이전트
+```
+
+### 규칙 사용
+
+규칙은 파일 패턴이나 명시적 트리거에 따라 자동 적용됩니다:
 
 ```yaml
-# Example: Rule with path-based activation
+# 예시: 경로 기반 활성화 규칙
 ---
-description: TypeScript coding standards
+description: TypeScript 코딩 표준
 paths:
   - "**/*.ts"
   - "**/*.tsx"
 ---
 ```
 
-## Project Structure
+## 프로젝트 구조
 
 ```
 ai-library/
-├── .claude/                    # This project's Claude Code workflow
-│   ├── skills/                 # Internal skills
-│   └── agents/                 # Internal agents
-├── skills/                     # Shared skills (26)
+├── .claude/                    # 이 프로젝트의 Claude Code 워크플로우
+│   ├── skills/                 # 내부 스킬
+│   └── agents/                 # 내부 에이전트
+├── skills/                     # 공유 스킬 (26개)
 │   ├── add-rules/
 │   ├── changelog/
 │   ├── code-review-team/
@@ -169,7 +167,7 @@ ai-library/
 │   ├── create-skill/
 │   ├── document-consolidator/
 │   ├── feature-workflow/
-│   ├── financial-*/            # Financial skills (7)
+│   ├── financial-*/            # 재무 관련 스킬 (7개)
 │   ├── first-principles/
 │   ├── git-commit/
 │   ├── kind-senior-developer/
@@ -181,93 +179,93 @@ ai-library/
 │   ├── prompt-improver/
 │   ├── skills-ref/
 │   └── vibe-mvp-advisor/
-├── agents/                     # Shared agents (2)
+├── agents/                     # 공유 에이전트 (2개)
 │   ├── data-crawler/
 │   └── family-financial-advisor/
-└── rules/                      # Shared rules (2)
+└── rules/                      # 공유 규칙 (2개)
     ├── CLAUDE.md
     └── CODING.md
 ```
 
-## Writing Your Own Assets
+## 직접 만들기
 
-### Creating a Skill
+### 스킬 만들기
 
 ```yaml
 ---
 name: my-skill
 description: >
-  What this skill does.
-  When to use this skill (trigger keywords).
+  이 스킬이 하는 일.
+  이 스킬을 사용할 때 (트리거 키워드).
 ---
 
 # My Skill
 
-Core instructions here (keep under 5000 tokens).
+핵심 지침 (5000 토큰 이내).
 
-## References
+## 참고
 
-- [Detailed Guide](references/guide.md)
+- [상세 가이드](references/guide.md)
 ```
 
-### Creating an Agent
+### 에이전트 만들기
 
 ```yaml
 ---
 name: my-agent
 description: >
-  Agent role description.
-  Proactively used when [trigger conditions].
+  에이전트 역할 설명.
+  [트리거 조건]일 때 자동으로 사용.
 tools: Read, Grep, Glob, Bash
 model: inherit
 ---
 
-You are a [role description].
+당신은 [역할 설명]입니다.
 
-When invoked:
-1. First step
-2. Second step
+호출 시:
+1. 첫 번째 단계
+2. 두 번째 단계
 3. ...
 ```
 
-### Creating a Rule
+### 규칙 만들기
 
 ```yaml
 ---
 description: >
-  What this rule covers.
-  Applied when working with [trigger conditions].
+  이 규칙이 다루는 내용.
+  [트리거 조건]에서 적용.
 paths:
   - "**/*.ts"
 ---
 
-# Rule Title
+# 규칙 제목
 
-Rule content here.
+규칙 내용.
 ```
 
-## Best Practices
+## 모범 사례
 
-1. **Keep Stage 2 content under 5000 tokens** - Move detailed examples to `references/`
-2. **Write clear descriptions** - Include "what" and "when" for proper activation
-3. **Use document-based communication** - Let workflows communicate via markdown files
-4. **Commit at checkpoints** - Use git commits to track workflow progress
-5. **Isolate contexts** - Run complex steps in separate agent contexts
+1. **2단계 콘텐츠는 5000 토큰 이내로 유지** — 상세 예시는 `references/`로 이동
+2. **명확한 설명 작성** — "무엇을"과 "언제"를 포함하여 올바른 활성화 보장
+3. **문서 기반 소통** — 워크플로우 간 마크다운 파일로 소통
+4. **체크포인트에서 커밋** — git 커밋으로 워크플로우 진행 상황 추적
+5. **컨텍스트 격리** — 복잡한 단계는 별도 에이전트 컨텍스트에서 실행
 
-## Contributing
+## 기여하기
 
-Contributions are welcome! Please follow these guidelines:
+기여를 환영합니다! 다음 가이드라인을 따라주세요:
 
-1. Follow the Progressive Disclosure principle
-2. Keep core instructions concise
-3. Include comprehensive references for complex topics
-4. Test assets with Claude Code before submitting
+1. Progressive Disclosure 원칙을 따를 것
+2. 핵심 지침을 간결하게 유지할 것
+3. 복잡한 주제에는 충분한 참고 자료를 포함할 것
+4. 제출 전 Claude Code에서 테스트할 것
 
-## License
+## 라이선스
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+이 프로젝트는 MIT 라이선스를 따릅니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
-## Acknowledgments
+## 감사의 말
 
-- Built for [Claude Code](https://claude.ai/claude-code)
-- Follows [agentskills.io](https://agentskills.io/specification) specification
+- [Claude Code](https://claude.ai/claude-code)를 위해 제작
+- [agentskills.io](https://agentskills.io/specification) 규격을 따름

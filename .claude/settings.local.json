@@ -8,7 +8,9 @@
       "Bash(gh api:*)",
       "Bash(chmod:*)",
       "Bash(bash:*)",
-      "Bash(uvx:*)"
+      "Bash(uvx:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
