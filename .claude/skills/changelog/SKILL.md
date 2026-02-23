@@ -20,19 +20,43 @@ CHANGELOG.md에 변경 사항과 변경 담당자(문의담당자)를 정리하�
 
 ## 실행 단계
 
+### 0단계: 모노레포 감지
+
+프로젝트 구조를 확인하여 모노레포 여부를 판별합니다.
+
+```bash
+# 모노레포 감지 — 아래 중 하나라도 있으면 모노레포
+grep -q '"workspaces"' package.json 2>/dev/null && echo "MONOREPO: npm/yarn workspaces"
+test -f pnpm-workspace.yaml && echo "MONOREPO: pnpm workspace"
+test -f lerna.json && echo "MONOREPO: lerna"
+```
+
+**모노레포인 경우:**
+1. 패키지 목록을 확인하여 사용자에게 대상 패키지를 질문합니다.
+2. 사용자가 선택한 패키지 경로를 `PKG_DIR`로 설정합니다.
+   - 예: `PKG_DIR=packages/foo`
+3. 이후 모든 단계에서 아래 경로를 사용합니다:
+   - `package.json` → `{PKG_DIR}/package.json`
+   - `CHANGELOG.md` → `{PKG_DIR}/CHANGELOG.md` (패키지별 관리 시) 또는 루트 `CHANGELOG.md` (루트 통합 관리 시, 사용자 확인)
+   - 커밋 범위: `git log ... -- {PKG_DIR}/`
+   - 태그 필터: `git tag -l "{패키지명}*" --sort=-v:refname | head -1`
+
+**모노레포가 아닌 경우:** `PKG_DIR=.` (루트)로 설정하고 기존 로직 그대로 진행합니다.
+
 ### 1단계: 현재 상태 파악
 
 ```bash
 # 1. 현재 버전 확인
-grep -m 1 '"version"' package.json
+grep -m 1 '"version"' {PKG_DIR}/package.json
 
 # 2. 최근 태그 이후 커밋 확인 (태그가 없으면 전체 커밋)
+# 모노레포: 패키지명으로 태그 필터링, 단일레포: 전체 태그
 git tag --sort=-v:refname | head -1
-git log $(git tag --sort=-v:refname | head -1)..HEAD --oneline --no-merges 2>/dev/null || \
-  git log --oneline --no-merges -20
+git log $(git tag --sort=-v:refname | head -1)..HEAD --oneline --no-merges -- {PKG_DIR}/ 2>/dev/null || \
+  git log --oneline --no-merges -20 -- {PKG_DIR}/
 
 # 3. 기존 CHANGELOG.md 확인
-head -30 CHANGELOG.md 2>/dev/null || echo "CHANGELOG.md 없음 - 새로 생성"
+head -30 {PKG_DIR}/CHANGELOG.md 2>/dev/null || echo "CHANGELOG.md 없음 - 새로 생성"
 ```
 
 ### 2단계: 버전 유형 선택
@@ -64,8 +88,8 @@ head -30 CHANGELOG.md 2>/dev/null || echo "CHANGELOG.md 없음 - 새로 생성"
 **담당자 추출:**
 
 ```bash
-# 커밋별 작성자 확인
-git log $(git tag --sort=-v:refname | head -1)..HEAD --format="%s|%an" --no-merges
+# 커밋별 작성자 확인 (PKG_DIR 스코프 적용)
+git log $(git tag --sort=-v:refname | head -1)..HEAD --format="%s|%an" --no-merges -- {PKG_DIR}/
 ```
 
 ### 4단계: CHANGELOG.md 작성
@@ -96,11 +120,9 @@ git log $(git tag --sort=-v:refname | head -1)..HEAD --format="%s|%an" --no-merg
 ### 5단계: package.json 버전 업데이트
 
 ```bash
-# package.json의 version 필드를 새 버전으로 수정
+# {PKG_DIR}/package.json의 version 필드를 새 버전으로 수정
 # Edit 도구를 사용하여 "version": "이전버전" → "version": "새버전" 변경
 ```
-
-**모노레포인 경우:** 해당 패키지의 package.json만 수정합니다.
 
 ### 6단계: 결과 확인
 
