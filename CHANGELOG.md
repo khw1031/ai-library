@@ -3,6 +3,14 @@
 이 프로젝트의 주요 변경 사항을 기록합니다.
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 기반으로 합니다.
 
+## [0.1.2] - 2026-02-24
+
+### ✨ 새 기능
+- project-initializer 스킬 추가 (범용 프로젝트 초기화, 5-Phase 워크플로우) — @khw1031
+
+### 📝 문서
+- skills/README.md, 루트 README.md 업데이트 (project-initializer 반영, add-rules 제거) — @khw1031
+
 ## [0.1.1] - 2026-02-23
 
 ### ✨ 새 기능

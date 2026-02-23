@@ -45,7 +45,6 @@ asset-name/
 
 | Skill | 설명 |
 |-------|------|
-| `add-rules` | 프로젝트에 규칙을 Skill 기반으로 추가하고 기존 규칙을 Skill로 변환 |
 | `changelog` | CHANGELOG.md에 변경 사항과 담당자를 정리하고 package.json 버전 업데이트 |
 | `code-review-team` | 전문가 관점 코드 리뷰 + Agent Team 병렬 개선 작업 |
 | `create-agent` | Claude Code Agent 생성 |
@@ -62,6 +61,7 @@ asset-name/
 | `note-search` | notes/ 디렉토리 학습 노트 검색 |
 | `note-writer` | Obsidian 호환 학습 노트 작성 |
 | `progressive-disclosure` | LLM 컨텍스트 윈도우 3단계 정보 로드 원칙 |
+| `project-initializer` | 프레임워크별 프로젝트 초기화 + 최신 정보 조사 + 규칙 자동 생성 |
 | `prompt-improver` | 실증 기반 기법으로 프롬프트 분석/개선 |
 | `rule-manager` | Skill 기반 규칙 추가 및 관리 |
 | `skills-ref` | CLAUDE.md에 Available Skills 섹션 XML 생성 |
@@ -160,7 +160,6 @@ ai-library/
 │   ├── skills/                 # 내부 스킬
 │   └── agents/                 # 내부 에이전트
 ├── skills/                     # 공유 스킬 (27개)
-│   ├── add-rules/
 │   ├── changelog/
 │   ├── code-review-team/
 │   ├── create-agent/
@@ -177,6 +176,7 @@ ai-library/
 │   ├── note-search/
 │   ├── note-writer/
 │   ├── progressive-disclosure/
+│   ├── project-initializer/
 │   ├── prompt-improver/
 │   ├── rule-manager/
 │   ├── skills-ref/

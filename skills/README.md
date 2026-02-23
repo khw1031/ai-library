@@ -28,6 +28,7 @@
 | `note-search` | notes/ 디렉토리 학습 노트 검색 |
 | `note-writer` | Obsidian 호환 학습 노트 작성 |
 | `progressive-disclosure` | LLM 컨텍스트 윈도우 3단계 정보 로드 원칙 |
+| `project-initializer` | 프레임워크별 프로젝트 초기화 + 최신 정보 조사 + 규칙 자동 생성 |
 | `prompt-improver` | 실증 기반 기법으로 프롬프트 분석/개선 |
 | `rule-manager` | Skill 기반 규칙 추가 및 관리 |
 | `skills-ref` | CLAUDE.md에 Available Skills 섹션 XML 생성 |
@@ -52,6 +53,7 @@ AI 자산(Skill, Agent, Rule) 생성 관련 스킬
 | Skill | Description |
 |-------|-------------|
 | `feature-workflow` | 5단계 기능 구현 워크플로우 |
+| `project-initializer` | 프레임워크별 프로젝트 초기화 (5-Phase) |
 
 ### 코드 품질
 
