@@ -1,12 +1,11 @@
 # Skills
 
-> Claude Code에서 사용할 수 있는 프롬프트 기반 도구 모음 (총 26개)
+> Claude Code에서 사용할 수 있는 프롬프트 기반 도구 모음 (총 27개)
 
 ## 요약
 
 | Skill | Description |
 |-------|-------------|
-| `add-rules` | 프로젝트에 규칙을 Skill 기반으로 추가하고 기존 규칙을 Skill로 변환 |
 | `changelog` | CHANGELOG.md에 변경 사항과 담당자를 정리하고 package.json 버전 업데이트 |
 | `code-review-team` | 전문가 관점 코드 리뷰 + Agent Team 병렬 개선 작업 |
 | `create-agent` | Claude Code Agent 생성 |
@@ -30,6 +29,7 @@
 | `note-writer` | Obsidian 호환 학습 노트 작성 |
 | `progressive-disclosure` | LLM 컨텍스트 윈도우 3단계 정보 로드 원칙 |
 | `prompt-improver` | 실증 기반 기법으로 프롬프트 분석/개선 |
+| `rule-manager` | Skill 기반 규칙 추가 및 관리 |
 | `skills-ref` | CLAUDE.md에 Available Skills 섹션 XML 생성 |
 | `vibe-mvp-advisor` | AI 아이디어 구현 가능성 및 수익화 MVP 제안 |
 
@@ -68,7 +68,7 @@ AI 자산(Skill, Agent, Rule) 생성 관련 스킬
 
 | Skill | Description |
 |-------|-------------|
-| `add-rules` | 프로젝트에 규칙을 Skill 기반으로 추가 |
+| `rule-manager` | Skill 기반 규칙 추가 및 관리 |
 
 ### Git & 배포
 

@@ -39,7 +39,7 @@ asset-name/
 
 ## 구성 요소
 
-### Skills (26개)
+### Skills (27개)
 
 전문 기능을 제공하는 프롬프트 기반 도구:
 
@@ -63,6 +63,7 @@ asset-name/
 | `note-writer` | Obsidian 호환 학습 노트 작성 |
 | `progressive-disclosure` | LLM 컨텍스트 윈도우 3단계 정보 로드 원칙 |
 | `prompt-improver` | 실증 기반 기법으로 프롬프트 분석/개선 |
+| `rule-manager` | Skill 기반 규칙 추가 및 관리 |
 | `skills-ref` | CLAUDE.md에 Available Skills 섹션 XML 생성 |
 | `vibe-mvp-advisor` | AI 아이디어 구현 가능성 및 수익화 MVP 제안 |
 
@@ -158,7 +159,7 @@ ai-library/
 ├── .claude/                    # 이 프로젝트의 Claude Code 워크플로우
 │   ├── skills/                 # 내부 스킬
 │   └── agents/                 # 내부 에이전트
-├── skills/                     # 공유 스킬 (26개)
+├── skills/                     # 공유 스킬 (27개)
 │   ├── add-rules/
 │   ├── changelog/
 │   ├── code-review-team/
@@ -177,6 +178,7 @@ ai-library/
 │   ├── note-writer/
 │   ├── progressive-disclosure/
 │   ├── prompt-improver/
+│   ├── rule-manager/
 │   ├── skills-ref/
 │   └── vibe-mvp-advisor/
 ├── agents/                     # 공유 에이전트 (2개)

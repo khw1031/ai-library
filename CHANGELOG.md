@@ -3,6 +3,17 @@
 이 프로젝트의 주요 변경 사항을 기록합니다.
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 기반으로 합니다.
 
+## [0.1.1] - 2026-02-23
+
+### ✨ 새 기능
+- rule-manager 스킬 추가 (add-rules 대체) — @khw1031
+
+### 📝 문서
+- README.md 한국어로 전면 재작성 — @khw1031
+- 전체 스킬/에이전트 README.md 및 CHANGELOG 작성 — @khw1031
+- rule-manager README.md 작성 — @khw1031
+- skills/README.md, 루트 README.md 업데이트 (rule-manager 반영) — @khw1031
+
 ## [0.1.0] - 2026-02-14
 
 ### ✨ 새 기능
