@@ -4,9 +4,9 @@
 
 <available-skills>
 
-<skill name="add-rules" ref=".claude/skills/add-rules">
-  <description>프로젝트에 규칙을 Skill 기반으로 추가하고 기존 규칙을 Skill로 변환합니다.</description>
-  <trigger>규칙 추가, 룰 추가, rule 추가, 새 규칙, 컨벤션 추가, 스타일 가이드 추가, 가이드라인 추가, 규칙 변환, rule 통합 요청 시 활성화.</trigger>
+<skill name="changelog" ref=".claude/skills/changelog">
+  <description>CHANGELOG.md에 변경 사항과 담당자를 정리하고 package.json 버전을 올립니다.</description>
+  <trigger>changelog 작성, 변경 이력 정리, 버전 올리기, 릴리즈 노트, CHANGELOG 업데이트 요청 시 사용.</trigger>
 </skill>
 
 <skill name="create-agent" ref=".claude/skills/create-agent">
@@ -44,9 +44,19 @@
   <trigger>프롬프트 개선, prompt 리뷰, 프롬프트 최적화, 프롬프팅 개선 요청 시 사용.</trigger>
 </skill>
 
+<skill name="rule-manager" ref=".claude/skills/rule-manager">
+  <description>Skill 기반의 규칙을 레포지토리에 추가하고 관리합니다.</description>
+  <trigger>규칙 추가, 룰 추가, rule 추가, 새 규칙, 컨벤션 추가, 스타일 가이드 추가, 가이드라인 추가 요청 시 활성화.</trigger>
+</skill>
+
 <skill name="skills-ref" ref=".claude/skills/skills-ref">
   <description>스킬 디렉토리를 스캔하여 CLAUDE.md에 Available Skills 섹션을 XML 구조로 생성합니다.</description>
   <trigger>스킬 등록, 스킬 목록 생성, CLAUDE.md 스킬 섹션, skills ref, 스킬 인덱스, available skills 작성 요청 시 활성화.</trigger>
+</skill>
+
+<skill name="update-ai-tools" ref=".claude/skills/update-ai-tools">
+  <description>AI 도구(Skill, Agent) 추가/변경 후 모든 README.md를 재귀적으로 업데이트하고 CHANGELOG에 반영합니다.</description>
+  <trigger>update-ai-tools, README 업데이트, 도구 문서 갱신, 문서 동기화 요청 시 사용.</trigger>
 </skill>
 
 </available-skills>
