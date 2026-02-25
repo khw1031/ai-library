@@ -1,8 +1,8 @@
 ---
 name: create-skill
 description: >
-  Claude Code Skill을 생성합니다.
-  스킬 생성, SKILL.md 작성, 새 스킬 만들기 요청 시 활성화.
+  Claude Code Skill을 생성하거나 기존 스킬을 개선합니다.
+  스킬 생성, 스킬 수정, SKILL.md 작성, 새 스킬 만들기, 스킬 개선, 스킬 업데이트 요청 시 활성화.
 ---
 
 # Skill 생성
@@ -10,6 +10,8 @@ description: >
 Claude Code Skill을 생성하는 가이드입니다.
 
 ## Progressive Disclosure 핵심
+
+> **컨텍스트 윈도우는 공공재입니다.** Claude는 이미 충분히 똑똑합니다. Claude가 모르는 정보만 추가하세요.
 
 스킬은 3단계로 정보를 로드합니다. 생성 시 각 단계의 역할을 명확히 분리하세요.
 
